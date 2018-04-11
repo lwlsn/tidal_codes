@@ -1,4 +1,4 @@
-cps (130/120/2)
+cps (125/120/2)
 
 d1 $ 
 $ sound (samples "[industrial*8, click*2 perc*4]" (slow 4 $ scan 5))
