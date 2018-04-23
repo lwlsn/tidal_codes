@@ -1,7 +1,6 @@
 cps (125/120/2)
 
-d1 $ 
-$ sound (samples "[industrial*8, click*2 perc*4]" (slow 4 $ scan 5))
+d1 $ sound (samples "[industrial*8, click*2 perc*4]" (slow 4 $ scan 5))
 #lpf (scale 1200 2400 $ slow 4 $ sine1)
 #lpq 0.2
 
