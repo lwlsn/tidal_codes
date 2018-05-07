@@ -1,2 +1,8 @@
 # tidal_codes
-Tidal codes v2
+Codes that I have made in TidalCycles 
+
+
+https://tidalcycles.org/
+
+
+
