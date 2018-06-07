@@ -1,0 +1,197 @@
+cps (60/120)
+
+let (modFreq, _) = pI "modFreq" (Just 100)
+
+let (pitch, _) = pI "pitch" (Just 100)
+
+let (ffrq, _) = pF "ffrq" (Just 100)
+
+let (rq, _) = pF "rq" (Just 100)
+
+hush
+
+
+
+t1 (xfadeIn 8)
+$ jux (#speed "<[0.5 0.2]*2 0.25 0.75 [-1 1]>")
+$ slowspread ($) [stut 2 0.5 0.5, stut 4 0.25 0.5]
+$ often (fast 2)
+$ off 0.25 (|+| n "<6 5>")
+$ sound "[808(9,12)]/4"
+#speed "[[0.1 ,0.8][0.5, 1.2][0.25 0.75]]"
+#room 0.25
+#size 0.1
+#orbit 0
+#gain 0.8
+
+
+
+
+d1 $ jux (#speed "<[0.5 0.2]*2 0.25 0.75 [-1 1]>")
+$ slowspread ($) [stut 2 0.5 0.5, stut 4 0.25 0.5]
+$ off 0.25 (|+| n "5")
+$ rarely (fast 2 )
+$ degradeBy 0.2
+$ sound "[808(7,12)]/4"
+#speed "[[0.1 ,0.8][0.5, 1.2][0.25 0.75]]"
+#room 0.25
+#size 0.1
+#orbit 0
+#gain 0.8
+-- #cutoff (sine1*2500+200)
+
+
+d1 silence
+
+t2 (xfadeIn 8)
+$ n ( off 0.125 (+"<7 <-12 12>>") $ "<c4 e4 c3 a3>" + "g4*2") -- take out offset at first
+# sound "supercomparator/2"
+#bpf (slow 8 $ sine1*50+120)
+#bpq (scale 0.2 1.2 $ slow 4 $ sine1)
+# gain "0.7" # shape "0.75"
+
+t4 (xfadeIn 8)
+-- $ every 4 (0.25 <~)
+-- $ every 5 (jux (#speed "-1"))
+-- $ degradeBy 0.63
+-- $ rarely ((jux (fast 2).(stut' 2 0.125 (#crush 12))))
+$ sound "beached:4"
+#gain 0.7
+
+t3 (xfadeIn 8)
+$ every 4 (jux (#speed "<[0.5 0.2]*2 0.25 0.75 [-1 1]>"))
+$ stack [
+every 4 (0.25 <~ ) $ sound "[808 808*2]/4" #speed "<0.2 0.3 0.25 0.25>",
+sound "[house:5]/2" #speed "0.4"
+]
+#bpf (slow 8 $ sine1*1500+120)
+#bpq (scale 1 0.2 $ slow 4 $ sine1)
+|*| gain 0.9
+#room 0.25
+#size 0.1
+#orbit 3
+
+d1 silence
+
+d2 silence
+
+t1 (xfadeIn 8 )
+ $ loopAt "<1 2>"
+$ sometimes (fast 2)
+$ stack [
+whenmod 7 4 (#crush (scale 8 12 $ slow 4 $ tri1)) $
+ sound (samples "808bd*4" (irand 8)) #coarse "<8 12 20 6>"
+, every 2 (0.25 <~) $ sound "808bd:1(3,8, <0 1>)" #shape 0.25 #speed 0.85 #gain 1.2
+]
+|*| gain 1.1
+
+ d5 $ slow 32 $ sound "vox:1"
+# gain 1.25
+
+d3 $ stack[
+loopAt "<4 3>"$ sound "[tink(3,8) ~ perc:1 ~]",
+whenmod 7 4 (|*| gain 0) $ sound "v:3(3,8)" # speed (scale 0.8 1.2 $ sine1)
+]
+#gain 1.2
+
+
+d2 $ whenmod 7 4 (jux ((#speed "-0.5").(loopAt 2)))
+   $ every' 8 4 (within (0.0, 0.5) (slow 2))
+  $ stack [
+  spin 4 $ spread (loopAt) [1,2] $ sound "stab:4/2" |*| speed "-1" # coarse "6" # gain "0.9"
+  , (0.25 ~>) $ every 8 (density 2) $ stut 20 0.6 1.25 $ sound "peri:8/4" # gain "0.85" # coarse "2" # speed "1.7"
+  , whenmod 8 4 (stut 2 0.5 1.125)
+  $ iter 4
+  $ brak
+  $ stack [
+  spread density [1,2] $ sound "peri:2(6,8,<0 1 2>)" # speed "1" # coarse "2" # pan (density 3 $ scale 0.25 0.75 sine1) # gain "0.95"
+  ,  sound "[bend:1](1,8,2)" # speed "0.8" # gain "0.9" # shape "0.5"
+  ]
+]
+
+ d5 $ sound "jungbass:4(1,4,<0 3>)"
+# shape "0.2" # coarse "4" # up "5" # gain "1.3"
+
+
+ solo $ d1 $ slowspread ($) [stut 2 0.5 0.5, stut 4 0.5 0.5]
+ $ unwrap $ ([sound "gab:3" #gain 1.3,
+ stut 6 0.8 0.5 $ slow 1.5 $ sound "industrial:24" # speed 0.5 # gain 1.2,
+sound "~ gabbalouder*3" # gain "0 0.7"] !!) <$> "{0 1 [1,2] 0 1 [1,2] 0 2}%1"
+
+
+t3 (superwash (#accelerate "-2 2") (chop 4) 1 2 6)
+
+t3 (xfadeIn 8)
+ $ striate 4
+ $ degradeBy 0.2
+$ slowspread ($) [stut 2 0.5 0.5, stut 4 0.5 0.5]
+ $ up (off 0.25 (+"<7 12>")$ "[-6 6*2]*2" +"<<3 5> -2 0 0>")
+ # sound "jungbass:6"
+ #cut "0.25"
+ #cutoff 500
+ #gain 0.9
+ |*| up "-1"
+
+ t2 (xfadeIn 16)
+ $ often (fast 2)
+  $ sometimesBy 0.45 (|*| gain 0) $ jux (rev)
+  $ modFreq "[<40 ~ ~ <220 ~> >, 20 ~]"  # sound "fmshuffle" #gain 0.8
+
+d1 silence
+
+cps (75/120)
+
+
+
+
+d2
+-- $ off 0.75 (
+--         (|*| gain 0.8).
+--         (stut 4 0.5 0.25).   (slow 1.5).
+--               (iter 4).
+--               (# speed (iter 4 "1.5 0.5 0.75 -0.75"))
+--       )
+  $ stack [
+  slow 1.5 $ sound "rave:3" # speed (-0.7)
+  --, every 8 (fast 1.5)
+  --, sound "techno:1*2" # speed (0.5) #shape 0.45 # gain 1.3
+  -- , stut 4 0.75 0.25 $ sound "miniyeah*2" # coarse 6 # gain (slow 2.5 $ scale 0.8 1.0 sine1) #speed "-2"
+  --, sound "industrial:17(1,8,3)" # coarse 6
+  -- , sound "insect(3,8)" # coarse 2
+  -- , loopAt 2 $ sound (samples "industrial*2" (slow 2 $ scan 3)) #gain 0.9
+  --, sound "glitch:4*4" # shape 0.5 # gain 1.2 # coarse 2
+] |*| gain 0.9
+-- #cutoff 500
+
+
+d3 silence by this point !!
+
+ t5 (xfadeIn 4)
+ -- $ striate 10
+  $ stack [
+often (fast 2) $ sound "[auto:4 ~ ~ auto:6/2]/2" # shape "0.5" # speed "0.95" # gain "1.1"
+,  jux ((0.33 ~>).(|*| speed (choose [-0.75, 0.75, -1, 1])).(|*| gain "0.9"))
+$ stut 6 0.5 0.75 -- go from stut 6 to 2
+ $ density 2
+$ up "[-8 -7 -10](3,8)"
+# sound "808:0" # coarse "12"
+|*| speed (choose [1, 1, -1])
+# cutoff (slow 8 $ scale 100 3000 sine1)
+ # resonance "0.4"
+ ]
+ #  accelerate (scale 1.0 2.0 $ slow 8 $ sine1)
+ |*| gain 0.75
+ -- #cutoff 500
+
+ --push everything through a lowpass cutoff, reduce number of elements in drum variable,
+ -- reduce kick to *2
+
+ t4 (xfadeIn 8 )
+ $ slow 5 $ up "-5"
+ # sound "beached:6"
+ |*| gain 1.3
+
+-- reduce cps !
+
+
+hush
