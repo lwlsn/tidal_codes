@@ -1,0 +1,121 @@
+cps (60/120)
+
+-- supercollider intro --
+
+
+hush
+
+t1 (xfadeIn 8) $ slow 32 $ sound "vox:1"
+# gain 0.9
+
+
+t2 (xfadeIn 8)
+$ every 2 (jux (#speed "-1"))
+$ sound "[jungbass(3,8)]"
+#n (run 3)
+#gain 1.1
+#lpf "500"
+#hpf "100"
+
+d3 $ every 4 (fast 2)
+$ sound "[odx*2, bd:3(5,8)]" #shape 0.25 #speed "1 0.8"
+#cutoff (scale 500 1500 $ slow 8 $sine1)
+#resonance "0.1"
+#gain 1.2
+
+t4 (xfadeIn 8)
+ $ every 4 (0.25 <~)
+ $ every 5 (jux (#speed "-1"))
+ $ degradeBy 0.33
+$ rarely ((jux (fast 2).(stut' 2 0.125 (#crush 12))))
+$ sound "beached:4"
+#gain 0.8
+
+t2 (wash (chop 12) 8)
+
+d2 $ n ( off 0.25 (+ "<12 7>") $ off 0.125 (+ "<7 12>")  "<c4 e4 c3*2 a3>" + "g4*2") -- take out offset at first
+# sound "superchip"
+#bpf (slow 32 $ sine1*15000+120)
+#bpq (scale 0.2 0.4 $ slow 4 $ sine1)
+ # shape "0.75"
+
+
+ solo $ d5  $ slow 4 $ n "g3"
+ # sound "supergong"
+ #vowel "<a e o >"
+
+
+ t3 (xfadeIn 8) $ whenmod 7 4 (jux ((#speed "-0.5").(loopAt 2)))
+    $ every' 8 4 (within (0.0, 0.5) (slow 2))
+   $ stack [
+   spin 4 $ spread (loopAt) [1,2] $ sound "stab:4/2" |*| speed "-1" # coarse "6" # gain "0.9"
+   , (0.25 ~>) $ every 8 (density 2) $ stut 20 0.6 1.25 $ sound "peri:8/4" # gain "0.85" # coarse "2" # speed "1.7"
+   , whenmod 8 4 (stut 2 0.5 1.125)
+   $ iter 4
+   $ brak
+   $ stack [
+   spread density [1,2] $ sound "peri:2(6,8,<0 1 2>)" # speed "1" # coarse "2" # pan (density 3 $ scale 0.25 0.75 sine1) # gain "0.85"
+   ,  sound "[bend:1](1,8,2)" # speed "0.8" # gain "0.9" # shape "0.5"
+   ]
+ ]
+ #cutoff (slow 8 $ sine1*2500+250)
+
+ d4 $ sound "[odx*2, bd:3(5,8)]" #shape 0.25 #speed "1 0.8"
+ # cutoff (scale 300 1500 $ slow 8 $ sine) # resonance "0.1"
+ |*| gain 1.1
+
+ t2 (superwash (#accelerate "-2 2") (chop 4) 1 2 6)
+  $ stack [
+often (fast 2) $ sound "[auto:4 ~ ~ auto:6/2]/2" # shape "0.5" # speed "0.95" # gain "1.1"
+,  jux ((0.33 ~>).(|*| speed (choose [-0.75, 0.75, -1, 1])).(|*| gain "0.9"))
+$ stut 2 0.5 0.75 -- go from stut 6 to 2
+ $ density 2
+$ up "[-8 -7 -10](3,8)"
+# sound "808:0" # coarse "12"
+|*| speed (choose [1, 1, -1])
+# cutoff (slow 8 $ scale 100 500 sine1)
+ # resonance "0.4"
+ ]
+-- # accelerate (scale 1.0 2.0 $ slow 8 $ sine1)
+ |*| gain 0.75
+
+t4  (wash (striate 12) 8)  $ every 2 (0.25 <~) $ slowspread ($) [density 2, density "0.5"]
+$ every 5 ((stut 2 0.5 0.5).(#speed "-1"))
+$ every 6 (#crush (scale 6 12 $ slow 4 $ tri1))
+$
+stack [
+sound "M1drums(3,8)" #n (irand 16)
+#gain 0.8,
+ sound "amencutup*8" #n (irand 16)
+ #gain 0.85
+ ]
+# accelerate (scale 0.5 2.0 $ slow 8 $ sine1)
+
+t3  (wash (striate 12) 8)
+$  striate 48
+$ slow 2 $ up "<3 0 5 0>"
+# sound "M1synth:4"
+ # accelerate (scale 0.5 2.0 $ slow 8 $ sine1)
+
+ hush
+
+ solo $ d5 $ stack [
+  slowspread ($) [stut 2 0.5 0.5, stut 4 0.5 0.5]
+  $ unwrap $ ([sound "gab:3" #gain 1.3,
+  stut 6 0.8 0.5  $ sound "industrial:24" # speed 0.5 # gain 1.2,
+ sound "~ gabba*3" # gain "0 0.6"] !!) <$> "{0 1 [1,2] 0 1 [1,2] 0 2}%1"
+ ]
+ #gain 0.6
+
+
+d2 $ sometimes (jux (slow 2)) $ every 4 (density 2)
+$ rarely (#crush (scale 4 6 $ slow 2 $ sine1)) $ sound "bd*8"
+|*| gain 0.8
+
+d2 $ whenmod 16 14 (# speed "2") $ fast 2 $ stack [
+sound "bd ~ cp bass2",
+sound "[M1drums:6(3,8)]/4" #speed "[0.1,0.8][0.5, 1.2][0.25 0.75]]"
+]
+
+
+hush
