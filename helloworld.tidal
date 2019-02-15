@@ -1,0 +1,175 @@
+
+setcps (135/120/4)
+
+d5 silence -- << hush them all if not starting fresh
+
+d1 $ superimpose (density 2)
+  $  sometimesBy 0.2 (slowspread (loopAt) [1,2,4,8])
+  $  sometimesBy 0.6 (slowspread (density) [1,4,8])
+  $ slowspread (degradeBy) [0, 0.4, 0.6]
+  $ sound "ct-noise*3?"
+  # cut 1
+  # n (irand 16)
+  # cutoff "<400 800 >"
+
+xfadeIn 2 8
+$ loopAt "<2 4 8>"
+  $ striate "<32 64 126>"
+  $ degradeBy 0.8
+  $ sound "[ct-noise:5 ct-noise:6]*6"
+  # gain "0.8"
+  # cut 5
+
+xfadeIn 3 8 $ slowspread (striate) [8,16,32,64,128]
+    $ sound "ct-noise:19 ct-noise:20 ct-noise:19"
+    # cut "3 2"
+    # gain "0.6"
+    # up rand #pan rand
+
+xfadeIn 4 8
+$ degradeBy 0.4
+$ sound "numbers(5,9)?"
+#speed "-1 -0.75"
+#vowel " o o p a h "
+#n (irand 5) #pan rand
+#coarse "<6 12 24 12>"
+
+clutchIn 1 8 $ degradeBy 0 $ striate 2 $ jux (#speed "-1")
+$ whenmod 7 4 ((rev).(#speed 0.75))
+$ every 2 (chunk 4 (hurry 2))
+$ note  ( "[1 2 [~ 1] 3 ~ 2 [1 2] 4]")
+  # sound "<perc:2 can:1>" -- add can 1
+  #n (irand 16)
+  # gain "1.1"
+
+clutchIn 2 8
+ $ superimpose (# vowel "a w o o ") $ fast "<1 2>"
+$ every 4 (#crush (range 3 8 $ slow 8 $ sine))
+ $ every 5 (#accelerate "2 -2")
+ $ stut' 2 (0.125/2) (|*| gain "0.8")
+  $ sound "{clubkick:1 ~ perc:3, clubkick:1  ~ [~ clubkick:1 ] ~}"
+  # shape "<0.1 0.2>"
+  |*| gain 0.9
+  #lpf 800
+
+clutchIn 3 8
+ $ every 5 (loopAt 2)
+$ every 6 (#coarse "<2 4 >")
+  $ note (  off 0.125 (+12) $ "-12 -15" )
+# sound "perc"
+#shape 0.85
+|*| gain 2
+#attack "0.9"
+#cut "2"
+
+xfadeIn 1 8 
+
+d1 $ slow 2 $ striate 32 $ whenmod 7 4 (|*| speed "0.5") -- << striate 32 - 126
+$ sound (samples "yo/2" (irand 3))
+
+d4 $ slow 2 $ striate "126" $ whenmod 7 4 (|*| speed "0.5") -- << striate 32 - 126
+$ sound "pad"
+|*| gain 0.9
+
+xfadeIn 3 8
+ $ every 4 (jux (#speed "-1"))
+$ sometimesBy 0.15 ((#up "-12 12").(#accelerate "2 -2"))
+$ degradeBy 0.2
+$ striate 4  -- $ chop 4
+$ stut' 4 (0.125/2) (|*| gain "0.8")
+$ fast "<2 1>"
+$ note ( "[<0 3 0 5>](<3 2 5 3>, 8)") # sound "GBass:2" #cutoff "<250 500>"  -- add 0 -5
+#gain 0.9
+
+xfadeIn 2 8
+
+d2 $ every 4 ( every 4 (jux (#speed "-1 1.25 0.75")))
+ $ foldEvery [3,4] (0.25 <~)
+ $ degradeBy 0.2
+$ stack [
+ spin 8 $ degradeBy 0.6 $ sound "hh27*8?" #speed 0.75,
+ sometimes (stut' 4 0.25 (|*| gain "0.75")) $  sound "~ ss:4 [~ sn:5] cp:1" #cut "0.5",
+ whenmod 5 4 (jux (iter 4 )) $ stut' 4 (0.125/2) (|*| gain "0.7") $ fast 2 $ sound "~ idmhit1:1"
+]
+|*| gain 0.9
+
+ -- << this transition needs work ..
+setcps(145/120/4)
+
+-- fade out channels 3?
+
+hush
+
+let pat = "{1 1*2 ~ ~ ~ 0.8 ~ 1*2 1 ~ 1 0.8 ~ ~ [~ 1] ~ 1 [~ 1] ~ 1 ~}%8"
+
+xfadeIn 3 8
+$ every 10 (#accelerate "2 -2")
+$ every 6 ( off 0.125 (+7))
+  $ every 6 ( off 0.25 (+24) )
+$ gain pat # sound "stab:1"
+#resonance "<0.3 0.5 0.1 0>"
+#legato "< 0.5 0.1 2 1.0>"
+ # note "[[0,2][0,3]]"
+# cut "2" # n (irand 10) # speed "1" # shape "0.1"
+
+clutchIn 2 8
+ $ stut' "<4 2>" (0.125/2) ((|*| gain 0.8))
+$ gain pat
+# s "clubkick:2 ~ " # cut "1" # n "[0 4]/9"
+|*| gain 1.1
+#lpf "<1000 1500>"
+
+d4 silence
+
+clutchIn 1 8
+$ foldEvery [3,4] (0.25 <~)
+$ stack[
+whenmod 10 5 (0.125 <~) $ s "ss" # shape "0.2",
+whenmod 7 4 (const $ silence) $ stut' "<4 8>" (0.125/2) (|*| gain 0.8 ) $ sound "~ cp"  #speed 1.5 #end 0.75 #shape 0.2 # gain "0.9"
+]
+
+xfadeIn 4 8 $ degradeBy 0.4
+$ stack[
+gain "1*16" # sound "[007kit1]/10" # n (irand 10) # cut "-1" #speed 0.75
+]
+# delay "0.3"
+# delaytime (range 0.005 0.333 $ slow 3 tri)
+# delayfeedback (range 0.5 0.95 $ slow 4.33 tri)
+
+--- << add something else here??
+
+clutchIn 1 8 $ foldEvery [3,4] (0.25 <~)
+$ stut' 2 (0.125/2) (|*| gain "0.8")
+$ chop 6 
+$ stack [
+degrade $ sound "linnhats:6(7,8,<0 1>)" #speed 0.75,
+every 4 (density 2 ) $ every 5 (slow 2 ) $ sound " house ~ house [~ house]" #shape 0.65,
+sound "~ ~ ~ cp" # speed (range 0.75 1.25 $ slow 8 $ sine) # cutoff (range 500 4000 $ slow 8 $ tri)
+] 
+
+d2 $ slow 4 $ striate 4
+$ stut' 3 (0.33) (|*| gain "0.8")
+$ up (fast 2 $ off 0.25 (+3)
+$ off 0.125 (+12) " ~  ~ ~ 0 ~ ~ ~ -7" )
+# sound "GSynth:4" -- < change 4 to 5?
+#gain 1.1
+|*| up "<-4 -9>"
+
+  d3 $ degradeBy 0.2
+    $ stut' 3 (0.125/2) (|*| gain 0.8)
+    $ degradeBy 0.4
+        $ sound "<amencutup*16 amencutup*8>?" #n (irand 16)
+          #lpf "<400 1600 800 2200>"
+          #coarse "<20 10 60>"
+            |*| gain 1.3
+
+--- alice deej? 
+
+
+d1 $ striate "<2 4 8 16>" $ s "gab*38?"
+#speed "2 -2"
+
+setcps(110/120/2)
+
+
+hush
