@@ -1,0 +1,62 @@
+setcps(148/120/2)
+
+d3 silence
+
+d1 silence
+
+d2 silence
+-- degBy d4
+d4 silence
+
+hush
+
+let notePat = "[[d3, d4, f4,a4, d5,e5][d3,d4,f4, c5,e5]]"
+
+  -- fix these arps ??
+  xfadeIn 1 8 $ degBy 0.2 $
+    n ( slow 2 $ -- off 0.125 (+12) $ fmap (+12) $ 
+    slow 2 $  rarely (fmap (subtract 12)) $
+     arp "<converge updown>" $
+    notePat)  # s "midi" #g "1"
+   -- # attack (slow 0.18 $ choose [0.2,0.4,0.2,0.2,2])
+-- live 10 "toy marimba" w wirrness grain delay
+
+ xfadeIn 2 16 $ stack [
+    slow 8 $ n (  sometimes (fmap ( subtract 12) )
+    notePat) #s "midi2"
+  ] #g "0.65"
+-- live 10, descenting dreams, grain delay, flangers   ++embelish the dead zone
+
+xfadeIn 4 8
+$ every 4 (chunk 4 (hurry 2))
+ $ every 5 (jux rev)
+$ every 6 (brak.loopAt 2)
+ $ every' 8 6 brak
+$ stack [
+-- jux (iter 4) $ s "~ [perc:2 perc:3] ~ ~" ,
+-- every 2 (density 2. degBy 0.2) $ s "perc:1*4",
+-- stz 2 0.125 0.8 $ s "~ rs ~ rs" #speed 0.5,
+-- stz 2 (0.125/2) 0.75 $ s "~ ~ ~ [~ sn:1]" #ctf 200,
+s "[ ~ [clubkick:1,clubkick:2] ] clubkick:1 [clubkick:1,clubkick:2] clubkick:1" #ctf (range 500 1200 $ slow 2 $ sine)
+] 
+# g "1.1"
+--- grinder life kit + reverb
+
+xfadeIn 3 8
+-- $ every' 8 4 (within (0.0, 0.5) (slow 2))
+-- $ every 10 (const silence)
+$ stack [
+-- jux (iter 4) $ brak $ s "amencutup(7,16)?" #n (irand 16) #sp "<0.8 -0.8>" #g "1.1",
+sometimes (chop 2 ) $ spin 8 $ superimpose (#vowel "<o o p a a>") $ s "<rave:2 rave:3>" # sp "<-0.8 0.8>" #g "0.7" -- sometimes chop this up
+] |*| g "0.9"
+# coarse "<6 8 12>" -- coarse me up at the end baby
+
+-- d5 $ stack [
+-- sound "<rave:2 rave:3>" # sp "<-0.8 0.8>" #g "0.7"
+-- ]
+
+-- > solo d1
+
+hush
+
+d4 silence
