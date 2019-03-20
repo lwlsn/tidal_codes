@@ -1,0 +1,57 @@
+setcps (150/120/2)
+
+hush
+
+d1 silence
+
+--only d3 vocals by this point
+
+d3 $ jux (iter 4) $ rarely (#accelerate "2 -2") $ degBy 0.8
+$ slowspread (density) [1,2] $ slow 2 $ sound "rave:2([6 8 5 7]/4,16)"
+#cut "<1 2 4>" #speed "<0.5>" #g "0.9"
+#coarse "30"
+
+xfadeIn 1 8
+ -- $ every 4 (brak. jux rev)
+ -- $ every 5 (#speed "-1")
+ $ striate 8.chop 4 -- striate 8 // chop 4 
+  $ n (off 0.125 (+ "<3 12 24 9>") "a2 ~ [~ a3] ~")
+  # s "superhoover" #g "1.05"
+ #ctf (range 800 2400 $ slow 8 $ saw )
+
+  d2
+  $ stz 4 (0.125/2) 0.7
+  $ whenmod 7 4 (#crush (range 6 12 $ slow 8 $ sine ))
+  $ superimpose ((#lpf "<1200 800>").(#vowel ("a e")).chop 8) -- chop and striate this
+  $ sound "rave2(3,8)" #n (choose [2,3,4]) #g "1.1"
+  #ctf (range 1000 2000 $ slow 16 $ sine)
+
+  d4
+  $ every 4 (brak. jux rev)
+  $ every 5 (#speed "-1")
+   $ every 6 (const $ silence)
+   $ every 7 (#accelerate "2 -1")
+   $ chop 4
+  $ stack [
+  sound "{kickys:1 ~ <~ rave:6 <rave:3 rave:7>>, kickys:1 ~ [~ clubkick:2] ~}" #g "1.4" # shape "<0.2 0.4>" #ctf 800, -- add in rave7 and 3
+  jux rev $ s "[hatys:1*16?]" # pan "0.25" # end "[0.7 0.5 0.2 0.1]*4" #gain 0.8 #speed 0.5,
+  s "[~ ~ [~ superhat:12] [~ superhat:12]]" # pan "0.75",
+  stz 8 (0.125) 0.7 $ s "~ idmhit2:1"  #g "1.2" #coarse "< 12 24>" #ctf (range 1000 2000 $ slow 16 $ sine)
+  ] |*| g "1.1"
+  #coarse "< 12 24>"  #ctf (range 1000 2000 $ slow 16 $ sine)
+
+
+
+-- add some synthy sounds here maybe???
+
+
+hush
+
+
+  -- chop everything
+hush
+
+--- add some fun pattern transformers to this..
+
+
+hush
