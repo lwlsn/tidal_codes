@@ -1,0 +1,89 @@
+setcps (140/120/2)
+
+--shorthands
+let g a = gain a
+    stz a b c = stut' a b (|*| gain c)
+    ctf a = cutoff a
+    degBy a = degradeBy a
+    sp a = speed a
+    str a = striate a
+
+-- introdUce
+
+  once  $  superimpose (#vowel "o") $ jux (rev)
+   $ s "trn" #speed (1/3)
+     #pan rand -- >> 0.75 to 0.25
+     #vowel "<e>"
+
+  once  $ superimpose (#vowel " a y ") $ jux (rev)
+    $ s "trn:1" #speed (1/2) #pan rand
+    #vowel "<a y>"
+
+do
+  d1 $ slow 2  $ up ( "[<3 0 0 5>]*3 ~ ~ ~" ) # s "trn:2" #g 1.1
+  d2 $ slow 4 $ s "trn:3" #speed 0.75 #legato "<1 2 4>"
+
+xfadeIn 4 8
+$ within (0.25,0.75) (#coarse "<2 4 6 8>")
+$ every 6 (loopAt 2)
+--  $ every 10 (jux (#accelerate "2 -2")) -- use this sparingly
+ $ degBy 0.6 -- degrade in the end
+ $ stack [
+  slow 2 $ every 4 (0.25<~) $ every 5 (jux (#coarse "<6 12>")) $ s "clubkick:2*2 ~ clubkick:2(3,8) ~ " #cutoff 700  #size 0.2 #orbit "1" #gain "1.2",
+  degradeBy "< 0.6>" $ sound (samples "<can>(7,8)?" (slow 5 $ scan 6)) #cutoff (range 600 2000 $ slow 8 $ sine ) #speed 0.25 #g "<0.9 0.95 1.0 1.05>",
+  stz 3 (0.125) 0.75 $ degBy 0.25 $ s "hatys(7,16)?" #n (irand 4) #speed 0.85 #legato "<0.75 1>" #g 0.65 #pan rand,
+  s "alk*8?" #n (choose [0,1,2,4,5,8,9,13,16]) #speed "<0.75>" #shape 0.25
+ ]
+
+-- do i like this bit??
+do
+  let notePat = "[ds3, ds4, g4, as4] ~ ~ ~ [d3, d4, f4, c4] ~ [d3, as4]~  "
+  let notePat2 = "[ds2] ~ ~ ~ [d2] ~ [d3]~  "
+  d1 $ juxBy 0.2 (#speed "-1") $ s "ct-hit(3,8)" #n (irand 4) # g "0.8"
+  xfadeIn 2 8 $ every 3 (palindrome) $
+   every 4 (palindrome.rev) $ every 2 (const $ silence) $ note ( notePat) # s "metal" #ctf "<700 900>" # rel (slow 0.11 $ choose [0.2,0.8, 1,2]) #g "1.1"
+  xfadeIn 3 16 $ slow 2 $ stut' 4 (0.125/2) (|*| gain "0.8") $ note ( notePat2) # s "808" #cutoff (range 250 550 $ slow 8 $ sine) #shape 0.15 #g "1.2"
+
+---check cpu overloading here??
+
+clutchIn 4 8 
+$ every 4 (jux (#speed "-1 0.8"))
+$ every 5 (brak.chop 2)
+$ degBy 0.6
+$ stack [
+ s "yo/4" #n (irand 3) #g 0.9,
+sometimes (fast 2) $  "industrial:3/2"  #speed "<1 -2>" #g 0.6,
+stz 3 (0.125/2) 0.8 $ sound " ~ idmhit2:1" #ctf 1100 #g 1,
+every 3 (const $ sound "clubkick:1*4" #ctf 700) $ every 4 (0.25<~) $ sound "clubkick(5,8,<0 1>)" #cutoff "< 500 700 900>"  #size 0.2 #orbit "1" #g "1"
+]
+
+
+hush
+
+
+--messy transition here
+clutchIn 3 8 $ slow 4 $ n (almostNever (fmap (+12))  $ -- often (offadd (1/8) 12) $
+  "[[[f4 f4 c4 f3] ~ ~ [~ f3*2]] [[g3 g3 f4 g4] ~ ~ [~ d4*2]] [[c4 c4 g4 as4] ~ ~ [~ c4*2]] [[[d4 d4 a4 c5] ~] [[~ c4] [~ d4 ~ ~]]]]") #s "GBass:8"
+  # dur "0.3"
+
+
+ do
+  --  setcps (83/120)
+   d1 $ stack  [
+    rarely (brak. fast 2) $
+    s "[clubkick:2 [~ clubkick:1] ~ ~ ]"  # speed "0.9" # g "1.2" #ctf 400
+    ,  almostNever ((#speed "2").fast 2.(#pan rand)) $
+    s "[[~ sn:1]*2]" #ctf 900 #room 0.1 #size 0.1 #orbit 0
+    , almostNever (striate 8 . chop 4 . (# pan rand))  $
+     s "[[hatys:1*2 ~](3,8)]" #speed 0.5 #g "0.7"
+    ]
+
+
+hush
+
+
+
+
+z
+
+hush
