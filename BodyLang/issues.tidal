@@ -1,0 +1,25 @@
+do
+  let pat = "{1 0 1 1 ~ 0 1 0 ~ }%8"
+  let melody1 = "e4'min g4'maj c5'maj a4'min"
+      melody2 = "e3'min7 <c4'maj9 c4'maj7>"
+  d1 -- $ every 8 (chunk 2 (hurry 2))
+    --  $ whenmod 24 20 (|*| gain 0)
+    $ every 4 (# hpf "100 1e3 2e3" )
+    $ stack [
+      struct "t(3,8)!2" $ n ("0 1") # s "k:2" #ctf (range 800 1200 $ slow 8 $ sine) #shape 0.8 #g 1.05,
+      fast 2 $ stz 2 0.125 0.8 $ s "hatys(7,8)?" # n (irand 16) # g 0.9,
+      -- s "cp*8?" # n (irand 3) #ctf (range 20 2400 $  slow 32 $ saw ) ,
+      struct pat $ s "amencutup" # sp "<0.5>" #n (irand 16) #pan (fast 9 $ rand),
+      struct (inv pat) $ s "idmhit2" #n (irand 3)
+    ] #hpf 20
+  xFI 2 8 $ slow "<1 2  >" -- $ rarely (jux (slow 2.( #coarse "<2 4 6 1>")))
+    $ every 4 ((# hpf "200").(#vowel "<a e o>") )
+    $ stack [
+      note (arp "<updown converge diverge downup>" $ melody1)  # s "synthys:0" #g 1.2 # pan (fast 8 $ rand*0.5+0.25)
+      ,note "<e5 g5 c6 <a5 a6>> ~ " # s "synthys" #g 1.1
+      ]  -- #accelerate "1 -2"
+  xFI 3 8 $ note "<fs4 gs4 b4 cs5>(3,8)!2"
+   # s "GBass:5" # g 1.2 #shape 0.2
+   --  #accelerate "-2"
+  xFI 4 8 $ slow 4  $ striate' 32 0.05
+   $ stz 3 0.125 0.8 $ s " vcl-fx:2" # coarse "< 6 8 20 10>"   #g 0.9 -- #accelerate "< 0 2 0 -2>"
