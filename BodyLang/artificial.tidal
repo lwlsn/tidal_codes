@@ -1,0 +1,29 @@
+bpm (145)
+
+do
+  clutchIn 1 8
+    $ fast "<1>" $ str 1
+    $ off 0.125 ( +| n "<2 5>")
+    $ every 4 (fast 2.(#hpf 800 ))
+    $ every 5 (#crush (range 6 12 $ slow 8 $ sine))
+    $ every 6 (palindrome.slow 2) $ rarely (shift.spike)
+    $ note (off 0.25 (+ "7") $ off 0.125 (+"<12 24>") $
+   "[<c5>] gs4 g4 f4" )
+    # s "synthys:1" #cut "2"
+    #phasr (range 1 8 $ slow 16 $ sine ) #phasdp 8 #detune 1
+  d2 $ note "c4" # s "synthys:10" # g 1.4
+  d3 $ (|+| gain "0.1") $ foldEvery [3,4] (0.25 ~>) $
+    whenmod 22 19 (iter 8) $
+    whenmod 20 17 (iter 4)
+    $ stack [
+      s "welp*8?" # g 1.2
+      #n (irand 16) #sp "<0.75 1.25>",
+      runWith 2 (density 2) $
+      off (0.25*3) (|+| n "<4 2 3>") $ stack [
+      sound "k" #ctf 800  #shape 0.4 # n "<0 1 2>" # cut "4" ]
+      ] |*| g 0.9 #hpf 20
+  d4 $ every 4 ((#hpf "200 400 800").(fast 2))
+    $ stz 4 0.125 0.8
+    $ note "<c5 gs4>(3,8)" # s "GBass:5" -- # coarse "<6 12 1 2>"
+    #g 1.1 #ctf (range 200 1800 $ slow 32 $ sine)
+    #bpf (range 100 1000 $ slow 8 $ sine)
