@@ -1,0 +1,358 @@
+let measures n p ms = (n, p):ms
+    loopend n p = measures n p []
+    songLoop ms = seqPLoop $ structureSong 0 ms
+    structureSong st [] = []
+    structureSong st (p:ps) =  (st,(st+(fst p)),snd p) : (structureSong ((fst p)+st) ps )
+
+---- introduction  -----
+hush
+
+setcps (150/120/2)
+
+once $ s "wdws:9"
+#speed 0.5
+
+xFI 3 8 $ whenmod 7 4 (#sp 0.5) $ slow 2
+$ str 1 -- ramp up the striate
+$ s "<wdws:6 wdws:3>" #sp 0.75 #g 0.9
+
+xFI 1 8
+ $ rarely (chunk 2 (hurry 4))
+ $ str 32
+ $ almostNever (fmap (subtract 12))
+ $ whenmod 7 4 (#sp 0.75)
+ $ s "yello:5" # g 0.9
+ |*| sp 0.5
+
+clutchIn 3 8 -- some of this is quite clunky..
+ $ whenmod 7 6 ( brak)
+ -- $ every 4 (rip 0.5 0.125)
+ $ almostNever (jux (iter 4))
+ $ rarely (density "0.5")
+ $ stack [
+ s "clubkick:2(3,8,<0 1>)"  #lpf 400 # n (irand 4) #shape 0.6 #g 1.3,
+ sound "[GBass:3*3 ~ ~ ~]/2" # shape "0.3" # gain "0.8" # up (slow 2 (iter 2 "-5 -8")),
+ spin 8 $ sound "hatys:1(7,8)?" #n (irand 16) # gain (slow 4 "0 0.7 0.7 0.7"),
+ sound (samples "<can>(7,8)?" (slow 5 $ scan 6)) #cutoff (range 600 2000 $ slow 8 $ sine ) #speed 0.25 #g "<0.9 0.95 1.0 1.05>",
+ superimpose ((|*| speed "0.75").jux(0.25 ~>)) $ spin 12 $ striate 2 $ slow 8 $ sound "vcl-fx:0" # gain "0.5" # speed "0.5"
+ ]
+|*| gain 1.1
+
+xFI 1 8 $ slow 2 -- clunky transition
+ $ slice 8 "1*4 0"
+ $ str 16 $ chop 2
+ -- $ sometimes (#accelerate "0.2")
+ $ off 0.125 (#hpf 800)
+ $  s "wdws:12"
+#sp "<2 0.5>" # g 1
+
+d2 $ slow 4 $ sometimes (#sp "0.75" )
+$ s " ~ < yello:4 yello:8(3,8)>" #g 0.9
+#sp 0.25
+
+xFI 3 8
+$ whenmod 7 4 (#coarse "<12 6 18 24>")
+$ off 0.125 (#hpf 200)
+$ stack [
+sometimes (density 2 )
+$ stz 3 0.125 0.8 $ s "~ alk" # n (irand 3) # g 1.1,
+s "hatys(7,8)?" # n (irand 16) #g 0.8,
+every 2 (#sp "-0.75") $ s "amencutup*8?" # sp 0.75 #n (irand 32) # g 1.1
+]
+|*| g 0.9
+
+d3 silence
+---- interlude ----
+
+
+d1
+$ every 2 (chunk 2 (hurry 2).(#vowel "<a e o >"))
+$ every 3 ((|*| speed "-0.75").(#hpf 200))
+$ every 4 (#coarse "<2 4 10>")
+$ stack[
+s "k*4" # gain "1.35" #shape (fast 8 $ rand*0.5+0.2),
+stz 4 0.25 0.85 $ sound "GBass:4" # gain "1.3" # speed "0.65" # shape "0.2" # cut "1"
+] |*| gain 0.8
+
+
+-- maybe add something here?
+
+
+
+---- issues with intimacy ----
+
+setcps(138/120/2)
+
+do
+  let pat = "{1 0 1 1 ~ 0 1 0 ~ }%8"
+  let melody1 = "e4'min g4'maj c5'maj a4'min"
+      melody2 = "e3'min7 <c4'maj9 c4'maj7>"
+  d1
+    $ whenmod 24 20 (|*| gain 0)
+    $ every 8 ((# hpf "100 200 400 800").(slow 2))
+    $ whenmod 8 7 (chunk 2 (hurry 2))
+    $ stack [
+      -- struct "t(3,8)!2" $ n ("0 1") # s "k:2" #ctf (range 600 1200 $ slow 8 $ sine) #shape 0.8 #g 1.15,
+      -- fast 2 $ stz 2 0.125 0.8 $ s "hatys(7,8)?" # n (irand 16) # g 0.9,
+      -- s "cp*8?" # n (irand 3) #ctf (range 20 2400 $  slow 32 $ saw ),
+      -- struct pat $ s "amencutup" # sp "<0.5 -0.5>" #n (irand 16) #pan (fast 9 $ rand),
+      struct (inv pat) $ s "idmhit2" #n (irand 3)
+    ] #hpf 20 # sp "1"
+  xFI 2 8 $ slow "< 1 2>" $ rarely (jux (slow 2.( #coarse "<2 4 6 1>")))
+    $ every 4 ((# hpf "200").(#vowel "<a e o>") )
+    $ stack [
+      note ( slow "< 4 8 >" $ arp "<updown converge diverge downup>" $ melody2) # s "synthys:0" #g 1.3 # pan (fast 8 $ rand*0.5+0.25)
+      -- , note "<e5 g5 c6 <a5 a6>> ~ " # s "synthys:0" #coarse "<6 12 24 1>" #g 1.2
+      ] --  # accelerate "1 -0.5"
+  xFI 3 16 $  gtfo $ note "<fs4 gs4 b4 cs5>(3,8)!2"
+    # s "GBass:5" # g 1.2 #shape 0.2
+    #accelerate "-2 -1"
+  xFI 4 8 $ gtfo $ slow 4 $ striate' 32 0.05
+   $ stz 3 0.125 0.8 $ s " vcl-fx:2" # coarse "< 6 8 20 10>"  #g 1
+   #accelerate "< 0 2 0 -2>"
+
+
+ silence
+
+------ stabs -----
+setcps (135/120/2)
+
+do
+  let pat = "{1 ~ ~ 1 ~ ~ ~ ~}%2"
+      rep' n p = stut' (n-1) (0.125/2*3) (|*| gain "1") $ p
+      melody1 = "[d4'min as4'maj9 ]"
+      melody2 = "[d4'min as4'maj9 c5'maj d5'min7 ]"
+  xFI 1 8 $ slow 2 $ stack [
+      rarely (fmap (+3)) $ sometimes (# hpf "1e3 4e3 8e3") $ stz 4 0.125 0.8 $ note (melody1) # s "synthys:7" #pan (rand*0.5 +0.25) # ctf "<2000 1200 2400 1800>" # g 0.9
+      , note ( slow 2 $ off 0.125 (+12 ) $ arp "<updown>" $ melody2) # s "synthys:3"  #ctf "<500 1700 2000 1200>" #g 1.3 #pan 0.65 -- #decay (choose [0.2,0.1])
+    ]
+  d2 $ (|+| gain "0.1") $ foldEvery [3,4] (0.25 <~) $
+    stack [
+      degradeBy 0.4 $
+      sound "revkit*16" # n (density 2.3 $ run 7) # gain "0.75",
+      (every 2 (const $ s "clubkick:0*4" ) $ s "clubkick:1(3,8,<0 1>)" ) #shape 0.6 #sp 0.8 #ctf 400 #g 1.2,
+      whenmod 7 4 (jux (iter 8)) $ stz 3 0.125 0.8 $ s "~ idmhit2:2",
+      whenmod 14 7 (degrade) $ jux (iter 16) $
+      sound "808:2([5 3 7]/3,8)"  # cut "100" # end "0.05" # gain "0.7" # speed "0.25"
+      ] |*| g 0.9
+  xFI 3 8 $ whenmod 4 3 (const $ silence) $ slow "<1 2>"
+    $ note (arp "<downup>" $ melody1) # s "rave:3*4?" #sp 2 #g 1.1
+  d4 $ striate' 2 0.05 $ slow 8 $ note (arp "<updown>" melody2 ) # s "vcl-fx" # g 1.2
+
+
+d2
+  $ off 0.125 (+| n "<12 0>")
+  $ stack [
+    s "revkit*8?" # n (density 2.3 $ run 7) # gain "0.75",
+    every 4 (density 2 ) $ sound "808:3([5 3 7]/3,8)"  # cut "100" # end "0.05" # gain "1.05" # speed "1"
+  ]
+
+clutchIn 3 8
+  $ stack [
+    s "als(3,8)" #n (irand 16) #speed (range 0.75 1.25 $ slow 8 $ sine) #lpf (range 800 2500 $ slow 16 $ saw),
+    s "doinks(3,8)" #n (irand 16) #speed 0.5
+  ]
+
+xFI 1 8
+  $ every 4 (jux (rev).(slow 2)) $ every 5 (chunk 2 (hurry 2))
+  $ stack [
+      fast 2 $ every 2 (const $ s "alk:1*2" # shape 0.5 #g 1.3) $ sound "clubkick(3,8)" #shape 0.8 #ctf 800 #g "1.3",
+      s "hatys:2*16?" #speed "0.8" #coarse "<2 4 6 1>"  #g 0.75,
+       stut' 4 (0.125/2) (|*| gain "0.8") $ s "808:5*8?" #speed 0.75 #g 1.1
+     ] |*| gain 0.8
+
+d3 silence
+
+ -------   interlude 2 ----
+
+ xFI 5 8 $ str "<2 4 8 12>" -- this goes nicely with d3 and d4
+ $ loopAt "<2 0>"
+ $  s "synthys:5"
+ # up "<0 -7>"
+ #g 1.2
+
+clutchIn 1 8
+ -- $ str 2 $ loopAt "<1 2 4 2>"
+ $ slow 2 $ zoom (0, 0.5) $ striate' 126 (1/10)
+ $ (superimpose (slow 1.04 . sometimes(rev)))
+ $ note "<c4 f3>(3,8)" # s "<nustab alstab:4>" #g 0.9
+
+ xFI 2 8
+  $ whenmod 6 5 (striate "<2 4>". (#pan rand))
+  $ every 5 crushit $ every 6 (loopAt 2)
+  $ stack [
+    slow "<1 2 4>" $ ((# hpf "2e3").(# pan rand))
+    $ n (run 4) # s "yello" # g "1.1" #speed 0.5
+ ]
+
+d4 silence
+---- arpy mayhem ---
+
+-- all silence but d1 & d2 ---
+
+ setcps (140/120/2)
+
+ do
+   xFI 1 8 -- using end over cut ?!
+    $ off 0.125 ( +| n "<2 5>")
+    $ gtfo
+    $ rarely (runWith 2 (density 2))
+     $ almostNever (chop 2)
+     $ every 4 (fast 2.(#hpf 1200))
+     $ note (  off 0.125 (+ "<12 24>")  $ off 0.25 (+ "7") $
+     "<c5 ds5> [~ gs4] g4 f4")
+     # s "synthys:1" #end "<0.35 0.4>" # g 1
+     #phasr (range 1 8 $ slow 8 $ sine ) #phasdp 2 #detune 2
+   d2 $ note "<c4>" # s "synthys:10" # g 1.3 #coarse "<1 2 4 8>"
+   d3 $ (|+| gain "0.1") $ foldEvery [3,4] (0.25 ~>) $
+     whenmod 22 19 (iter 8)
+     $ degBy "<0.1 0.6>"
+     $ stack [
+       s "welp*8?" # g 1.1
+       #n (irand 16) #sp "<0.75 1.25>",
+       runWith 2 (density 2) $
+       off (0.25*3) (|+| n "<4 2 3>") $ stack [
+       sound "k" #ctf 800  #shape 0.4 # n "<0 1 2>"  # g 1.1]
+       ] |*| g 0.9 #hpf 1
+   xFI 4 8 $ gtfo $ every 4 ((#hpf "200 400 800").(fast 2))
+     $ stz 4 0.125 0.8
+     $ note "<c5 gs4>(3,8)" # s "GBass:5" # coarse "<6 12 1 2>"
+     #g 1.2 #ctf (range 200 1800 $ slow 32 $ sine)
+
+
+d3 silence
+--- interlude v3 ----
+
+setcps(150/120/2)
+
+d1 $ jux (foldEvery [2..4] (3.75 <~))
+$ slow (discretise 1 $ shift' 3 $ choose [2..4])
+$ superimpose ((#speed 0.25).(slow 1.06))
+$ striate' 128 (1/20)
+$ foldEvery [2,3] (fast 1.25)
+$ degBy 0.8
+$ s "nustab"
+#g 0.9
+#lpf 5000
+
+d2
+$ every 4 (rip 0.8 0.125)
+$ every 8 (#accelerate "2 -1")
+$ every 9 (jux rev)
+$ every 10 ((#speed "1 0.25").(#hpf 200))
+$ degBy 0.8
+$ stack [
+  sometimes (one) $ shift $ "k(<3 5>,8,<0 5 2 3>)" #shape 0.5 #ctf "<800 1200>"
+  , stz 3 0.125 0.8 $  jux (iter 4 ) $ s "~ <idmhit1 idmhit2>" #n (choose [0,2,3,4])
+  ,  s "{peri can:8 ~ doinks}%8" #sp 0.5 #n (shift' 88 $ irand 20) #g 0.9
+]
+|*| g 1.1
+
+hush
+---- another ditty ----
+
+setcps (140/120/2)
+
+do
+  let soundPat =  s "synthys:6" #cut 2 # phasr (slow 8 $ sine*4) #phasdp (slow 8 $ sine*4) #g 1.2 #ctf 1200
+      notePat1 = note "d5*2 [d5, d6] ~ [as4 g4] ds5*2 [d5, d6] ~ [as4 g4]" # soundPat
+      chordPat2 = note "<c5'min ds5'maj>(3,8,<0 1>)" # soundPat
+  d1 $ slow 2 $ note "<d5 d4> [g4 as4]" # s "superhoover" #ctf "300" #g 1.2
+  d2 $ songLoop
+     $ measures 2 ( gtfo $ off 0.125 ( +| n "<1 2>") $ slow 2 $ notePat1)
+     $ loopend 2 ( off 0.125 ( +| n "< 2 1>") $ arp "<updown>" $ chordPat2)
+  d3  $ every 4 (#hpf "200 400 800 1e3") $ every 5 (jux (#speed "-1 0.5")) $
+      stack [
+      brak $ s "[909, auto:5, ifdrums](5,8)" # shape "0.6" # speed (iter 3 "0.5 1 0.75") # coarse "3" # gain "0.9",
+      slow 2 $ s " ~ [k(3,8),odx*2] ~ k*2" #ctf (range 250 300 $ slow 8 $ sine) #shape 0.6,
+      s "808:2(7,8)?"  #sp 0.25 # g 0.9,
+      every 2 (#speed "-0.5") $ s "amencutup*8?" #n (irand 16) #sp (range 0.5 0.75 $ slow 8 $ sine) #g 1.1 ]
+
+xFI 4 8 $ str "<16 32 64 126>" $ s "pad/2"
+
+xFI 2 8 $ slow 2
+$ off 0.125 ( +| n "< 2 3>")
+$ note "d6*2 [<d6 d5>] ~ [as5 g5] ds6*2 [d6] ~ [as5 g5]" # s "synthys:6"
+ #end 0.8 # phasr (slow 8 $ sine*4) #phasdp (slow 8 $ sine*4) #g 1.3 #ctf 1200
+
+d3 $ stack [
+    s "amencutup*8?" #n (irand 16) #sp (range 0.5 0.75 $ slow 8 $ sine) #g 1.1
+    ] #hpf 20
+
+d3 silence
+
+-------- bleeep blooop ------
+
+flood "bleep bloop "
+
+d1
+$ whenmod 7 4 (jux (iter 8).(stz 3 0.125 0.8))
+$ every 8 ((fast 2).(#hpf "200 800 1200")) $ off 0.125 (+| n "<0 1 2>")
+$ stack [
+-- whenmod 4 3 (density 2 ) $ s "krane(3,8,<0 1 2>)" #g 1.2 #shape 0.5 #ctf 800,
+s "~ krane:1 ~ krane:2" #sp 0.75 # g 0.8,
+jux (iter 4)  $ s "~ krane:3 " # g 0.85
+]
+|*| g 0.85
+
+xFI 2 8
+$ slow 2 $ off 0.125 (+| n " <1 3>")
+$ note ("[<b4 ds5> c5] [c5 [c5 c5]] [c5 c5] [c5 c5] [b4*4] [c5 [c5 c5]] [c5 c5] [c5 c5]" )
+# s "synthys:10" #g 1.3 #cut "2" # attack "0.85" #detune 2 #shape 0.6
+#phasr 2 #phasdp 8
+
+do
+  let notePat = "[c3, c4, e4, g4] ~ ~ ~ [as2, as3, d4, a4] ~ [as3, f4]~  "
+  xFI 3 16 $ slow 4
+    $ str 16
+    $ stack [
+    stut' 8 (0.125/2) (|*| gain "0.9") $ note (notePat) # s "synthys:7" #end 0.35 # ctf 800 #g 0.9
+    ] # g 0
+
+
+xFI 4 8
+  $ chunk 4 (chop 2.(#speed "0.5").(hurry 2))
+  $ slice 8 "3(5,8) 2*2"
+  $ jux rev $ degBy 0.3
+  $ begin (off 0.125 (+0.1) $ "0.1 0.1 [~ 0.2] 0.5")
+  # sound "<adeej:8 adeej:7>" # sustain 0.2
+  # accelerate "0.2 -0.5" # hpf 20 # hpq 0.3
+  #ctf 2000 #g 0
+
+d3 silence
+
+d1
+  $ every 8 (#hpf "200 400 800 1e3")
+  $ every 5 (crushit)
+  $ stack [
+    brak $ s "[909, auto:5, ifdrums](5,8)" # shape "0.6" # speed (iter 3 "0.5 1 0.75") # coarse "3" # gain "0.9",
+    slow 2 $ s " ~ [k(3,8),odx*2] ~ k*2" #ctf (range 250 300 $ slow 8 $ sine) #shape 0.6,
+    degradeBy 0.25 $ runWith 4 (density 2) $ iter 4 $ jux rev $
+    off 0.25 (|+| n "<1 3 5 2>") $ struct "t(3,8)*2" $ n "<0 1 4>" # sound "[jung5 jung6 jung7]/8"
+    # unit "c" # speed "8" # gain "0.9",
+    s "808:1(7,8)?"  #sp 0.2 #g 0.9
+  ]
+  #ctf 200
+
+d2
+ $ slow 2 $ struct "t(3,8,<0 1>)"
+ $  n "< <-12 0> -13 -15 -17>" # s "supergong"
+  #accelerate "0.8 -0.2" # g 1.1
+
+d4 silence
+
+--- outro  ---
+
+  d2 $ slow 8 $ zoom (0, 0.5) $ striate' 1000 (1/10)
+      $ (superimpose (slow 1.04 . sometimes(rev)))
+        $ sound (samples "k*3" (foldEvery [2,3,4] (0.25 ~>) $ run 30)) # gain "0.8"
+
+
+  d4 $ slow 2 $ striate' 32 0.05
+    $ note "a3" # s "nustab" #n (choose [4,5])
+    #g 1.1
+
+
+
+
+hush
