@@ -1,0 +1,52 @@
+setcps(140/120/2)
+
+let modifyNew p = every 5 (crushit.(rip 0.125 0.25)) $
+                  every 6 (chunk 2 (hurry 2)) $ p
+
+do
+  let notePat =  "c4 a4 c4 a4 e5 a5 e5 a4 f5 c5 f5 c5 g5 c5 <a5 <d6>> c5"
+  xFI 1 8 $ stack [
+    slow "<2 4>" $ sometimes (stz 3 0.125 0.8) $ s "k:2(3,8)"
+     # ctf 800 #shape (fast 9 $ range 0 0.2 $ sine) # g 1.1
+    ]
+  xFI 2 8
+    $ modifyNew
+    $ sometimes (|+| note "12")
+    $ rarely (degBy 0.2.(+| n "2 5"))
+    $ slow "<2>" 
+    $ note ( notePat)
+    # s "synthys:1"
+    #phasr (range 1 10 $ sine + (10*rand))
+    #phasdp "2"
+    #cutoff (slow "1 2 4 8" $ range 100 10e3 sine)
+    #resonance (slow "8 4 2 1" $ range 0.01 0.3 sine)
+    #g 1.1
+    -- |+| note "<12>"
+    d3
+      $ off 0.125 (+| n "1 ")
+      $ str 2.(#coarse "30")
+      $ note "<c5 c5 a4 <f4 e4>>(3,8,<0 1 2>)"
+      # s "GBass:2"
+      #g 1.1
+      -- #phasr (range 1 2 $ sine + (10*rand))
+      -- #phasdp "2"
+
+d1
+$ foldEvery [3,4] (0.25 <~)
+$ modifyNew
+$  stack [
+  s "jhit ~ " #n (irand 2) # g 1.1,
+  rep' 2 $ whenmod 7 4 (jux (iter 4 )) $ s "~ krane:3" 
+  # sp "<0.75 0.75 1 0.5>" # g 0.85,
+  s "hh:5*16?" #phasr 1 #phasdp 0.85 #sp 0.75 # g 1.2 #end 0.1,
+ slow "<1 2>" $ every 4 (0.25 <~) $ sometimes (stz 3 0.125 0.8) 
+ $ s "k:2(3,8)"  # ctf 800 #shape (fast 9 $ range 0 0.2 $ sine)
+  # g 1.2
+ ]
+  -- # coarse 40
+
+d4
+$ degBy 0.2
+$ spin 8
+$ splice 4 "0 [1 3] 2 3 6 [~ 3] 2*2 1"
+$ s " ~ ~ ~ rave2:2"
