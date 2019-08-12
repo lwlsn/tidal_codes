@@ -1,5 +1,7 @@
 # tidal_codes
-Codes that I have made in TidalCycles 
+
+
+circles are great
 
 
 https://tidalcycles.org/
