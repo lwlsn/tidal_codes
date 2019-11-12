@@ -2,14 +2,15 @@ setcps(140/120/2)
 
 let modifyNew p = every 5 (crushit.(rip 0.125 0.25)) $
                   every 6 (chunk 2 (hurry 2)) $ p
+    xfi = xFadeIn
 
 do
   let notePat =  "c4 a4 c4 a4 e5 a5 e5 a4 f5 c5 f5 c5 g5 c5 <a5 <d6>> c5"
-  xFI 1 8 $ stack [
+  xfi 1 8 $ stack [
     slow "<2 4>" $ sometimes (stz 3 0.125 0.8) $ s "k:2(3,8)"
      # ctf 800 #shape (fast 9 $ range 0 0.2 $ sine) # g 1.1
     ]
-  xFI 2 8
+  xfi 2 8
     $ modifyNew
     $ sometimes (|+| note "12")
     $ rarely (degBy 0.2.(+| n "2 5"))
