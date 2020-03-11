@@ -1,3 +1,8 @@
+setcps(140/120/2)
+
+--- this is all mainly midi in ableton 10, using the wavetable synthesis
+--- also a granulator max plugin
+--- alsoo my license ran out so i can't resample it :'( 
 
 do
   let mix = [0.98,1.1,1,1.05,0.8] --  0.98, 1.1, 1, 1.05 , 0.8
