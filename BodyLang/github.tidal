@@ -1,0 +1,53 @@
+
+setcps(140/120/2)
+
+
+resetCycles
+
+all $ (chop 4. str 2.(#hpf 200))
+
+all $ ((sometimes (#acc "-0.8 0.5")).(#hpf 200))
+
+all (#hpf "0")
+
+do
+  let megaMix = [0.775, 0.775, 1, 1.05, 0.8, 0.7] -- 0.75, 0.65, 0.9, 1.05, 0.8, 0.748
+  let notePat1 = "{c5 [~ f5 ] ~ c6 }%4"
+      notePat2 = "{c5 [cs6 f5] [~ ds5] c6}%4"
+      notePat3 = "[c5 [cs6 f5] [~ ds5] c6 [c5 [~ ds6]] [[~ ds6] f5] [~ ds5] c6 ]/2"
+      notePat4 = "[[c5 c6] [cs6 f5] [f6 [~ ds5]] [~ c6] [c5 [c6 ds6]]
+      			[[~ ds6] [f5 f6]] [[~ ds6] [~ ds5]] [[~ c6] ~]]/2"
+      addedNotePat1 = "~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ [ ~ [ds7 c7]] <~ [[~ c7] [~ c7]]>"
+      addedNotePat2 = "[[c4 ~] [~ ds4] ~ [g4 gs4] [c4 ~] [~ ds4] 
+		~ [gs4 as4] [c4 ~] [~ f4] ~ [gs4 as4]  [c4 ~] [~ f4] ~ [[as4 c5] [c5 c5]]]"
+  xfi 1 16
+      $ note "<c5 c5 gs4 as4>(7,8,<0 1 2>)?" #s "GBass:2"
+      #attack "0.01" # decay "0.2" # sustain "0.8" #release "0.2"
+      #vowel "<a e h>" #coarse 1 #g (megaMix!!0)
+  d2 $ sometimes (fast "<0.25 0.5 0 1>") $ s "k(5,8,<0 10 2>)" #g (megaMix!!1)
+  d3
+      $ every 10 (crushit.(rip 0.25 0.125))
+      $ sometimes (rev.palindrome)
+      $ often (jux (#speed "<-1 >"))
+      $ off 0.125 (|+| note "12")
+      $ degBy (choose [0.05,0.1..0.3])
+      $ note (notePat4) # s "ASynth" #g (megaMix!!2)
+      |+| note "< 0  0 <-12 12> <12>>"
+  xfi 4 8 $ slow "<4>" $ stack [
+    degradeBy 0.1 $ note (addedNotePat2) # s "ASynth" # g ((megaMix!!3)*0.9)
+    -- note (addedNotePat1) # s "ASynth" # g (megaMix!!3)
+    ]
+  d5 $ every 9 (#lpf "400 200 100")
+      $ every 10 (chunk 2 (hurry 2))
+      $ whenmod 24 20 (const $ silence)
+      $ every 10 (crushit.(rip 0.25 0.125))
+      $ stack [
+      -- degBy 0.25 $ s "hatys(7,16)?" #n (irand 8) #speed 0.75 #legato "<0.75 1>" #g 0.85 #pan rand,
+      -- sometimes (stut' 5 0.125 (|*| sp "1.25")) $ stz 3 (0.125/2) 0.75 $ s "~ krane:3" #g 0.77,
+      whenmod 7 4 (jux (iter 4.rev)) $ s "~ krane:1" # g 0.85
+      ] |*| g (megaMix!!4)
+  d6
+    $ every 4 ((#acc "0.2 -0.2").(#sp "1"))
+    $ s "tekken-upfx/8"
+    # n (irand 4)
+    |*| g (megaMix!!5) #sp "-1.25"
