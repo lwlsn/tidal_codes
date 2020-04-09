@@ -1,0 +1,17 @@
+setcps(140/120/2)
+
+xfi 1 8
+$ sometimesBy 0.05 (#acc "-1 0.2")
+$ sometimesBy 0.1 (stut' 4 (0.125/2) (|*| sp "1.25"))
+$ slow 32 $ str "<512 1024>"
+$ stack [
+s "rnn" # sp "-1",
+s "rnn"
+]
+|*| sp "0.5"
+#phasr (range 1 4 $ slowersine)
+#phasdp (range 0.1 2 $ slowersine)
+#bpf (range 800 3000 $ slowsine)
+
+
+all $ (#hpf "0")-- .(often (#acc "-2 0.2"))
