@@ -1,0 +1,111 @@
+setcps(140/120/2)
+
+let synthSound = s "bulmasy:2"  #sus 0.2 #rel 0.4 #sp "[1,1.02]" #end (0.07) #phasr (range 2 8 $ slow 8 $ sine) # g (1.3) #phasdp (range 0.1 2 $ slow 8 $ sine) #cutoff (range 800 4000 $ slow 16 $ sine)
+    bassSound =  s "GBass:2"  #shape 0.3 # g (1) #hpf 100
+    aahSound = s "supercomparator" # vowel "a "
+    stringSound = s "supersquare" # vowel "a" # g 0.8
+
+
+let notePatSynth1 = "b5 ~ ~ ~ [~ <~ as5>]"
+    notePatSynth2 = "b5 [b5(7,8) gs5] ~ ~ ~ ~ <fs6*2 e6*2> [~ [ds5 ds6]]"
+    notePatSynth3 = "b5 [b5 gs5] [~ b5] [~ b5] [~ as5] [~ fs5] <fs6*2 e6*2> [~ ds6]"
+    notePatBass1 = "[~ b4]*4 [~ as4]*4 [~ ds5]*4 [~ cs5]*4"
+    notePatBass2 = "[b4 ~ ] b4 ~ [b4 b4] [b4 ~ ] b4 ~ [b4 b4] [as4 ~ ] as4 ~ [as4 as4] [as4 ~ ] as4 ~ [as4 as4] [ds5 ~ ] ds5 ~ [ds5 ds5] [ds5 ~ ] ds5 ~ [ds5 ds5]  [cs5 ~ ] cs5 ~ [cs5 cs5] [cs5 ~ ] cs5 ~ [cs5 cs5]"
+
+-- intro
+resetCycles
+
+d1 $ s "idmhit1*4"
+
+do
+  d1 $ slow 2 $ note (notePatSynth1) # (synthSound)
+  d2 $ slow 4 $ note (notePatBass1) # (bassSound)
+  d3 $ s "[k ~ ]*4" # shape 0.6 # g 0.9
+
+-- add hihats
+do
+  d1 $ slow 2 $ note (notePatSynth1) # (synthSound)
+  d2 $ slow 4 $ note (notePatBass1) # (bassSound)
+  d3 $ s "[k ~ ]*4" # shape 0.6 # g 0.9 # g 0.8
+  d4 $ stack [
+    s "hh27*8" # g 1.1
+    ]
+
+
+--- some transition sound?
+do
+  d5 $ s "tekken-upfx:3/2" #sp 0.85 #g 1.2
+
+--- add drums, change synth line
+do
+  d5 shh
+  d1 $ slow 2 $ note (notePatSynth2) # (synthSound)
+  d2 $ slow 4 $ note (notePatBass1) # (bassSound)
+  d3 $ s "[k ~ ]*4" #end 0.6 # shape 0.1 # g 0.8
+  d4
+    $ stack [
+    sometimes (fast 4 ) $ s "~ als:2" # g 0.96,
+    s "~ ~ [808lt <808mt 808ht>] ~" # g 1.2 #shape 0.4,
+    fast 2 $ s "hh27 hh27 hh27:2 hh27" # g 0.9
+    ]  #coarse "2"
+
+---  add build up snare
+
+do
+  all $ (#hpf "400")
+  d1 $ slow 2 $ note (notePatSynth2) # (synthSound)
+  d2 $ slow 4 $ note (notePatBass1) # (bassSound)
+  d3 $ s "[k ~ ]*4" # shape 0.7 # g 0.9
+  d4
+    $ stack [
+    fast 2 $ s "sn:1*8" # g (range 0.9 1.1 $ slowersine),
+    sometimes (fast 4 ) $ s "~ als:2" # g 0.9,
+    s "~ ~ [808lt <808mt 808ht>] ~" # g 1.2 #shape 0.4,
+    fast 8 $ s "hh27 hh27 hh27:2 hh27" # g 0.9
+    ]  #coarse "2"
+
+--- break down
+do
+  d2 shh
+  d3 shh
+  d4 shh
+  d1 $ slow 2 $ note (notePatSynth3) # (synthSound)
+  d5 $ slow 4 $ note "gs5 fs5 gs5 as5" # (aahSound)
+  d6 $ slow 4 $ note "gs5 fs5 gs5 as5" # (stringSound)
+
+--- break down 2
+do
+  d1 $ slow 2 $ note (notePatSynth3) # (synthSound)
+  d2 $ slow 4 $ note (notePatBass2) #  (bassSound)
+  d4 $ stack [ fast 2 $ s "sn:1*8" # g (range 0.9 1.2 $ slowersine)]
+
+
+do
+  all $ (#hpf "20")
+  d5 shh
+  d6 shh
+  d1 $ slow 2 $ note (notePatSynth3) # (synthSound)
+  d2 $ slow 4 $ note (notePatBass2) # (bassSound)
+  d3 $ s "[k ~ ]*4" # shape 0.8 # g 0.9
+  d4
+    $ stack [
+    sometimes (fast 4 ) $ s "~ als:2" # g 1.1,
+    s "~ ~ [808lt <808mt 808ht>] ~" # g 1.2 #shape 0.4,
+    fast 2 $ s "hh27 hh27 hh27:2 hh27" # g 0.9
+    ]  #coarse "2" #g 1.1
+  d7
+    $ slow "<2 4>"
+    $ superimpose ((#vowel "a e ").(crushit).(rip 0.5 0.25))
+    $ often (#accelerate "-0.6 0.2")
+    $ rarely (jux rev)
+      $ s "adeej" #n (irand 8) # g 1
+      #up "11"
+      -- # cps((range 0.4 0.8 $ slowersine))
+      -- #cps (140/120/2)
+
+
+
+all $ (#hpf "200 400 800").(#coarse "<8 12>").crushit
+
+
+hush
