@@ -1,0 +1,77 @@
+setcps(110/120/2)
+
+let notePat = toScale [0,7,14,7,12,7,0,12] "0 1 2 3 4 5 6 7"
+    notePat2 = toScale [0,7,12,7,12,7,12,7] "0 1 2 3 4 5 6 7"
+    notePat3 = toScale [0,3,12,3, 10,3,7,3] "0 1 2 3 4 5 6 7"
+    soundPat = s "midi1"
+    -- soundPat = s "superpiano"
+
+
+-- verse
+do
+    {
+      -- resetCycles;
+      d1 $ slow 1 $ seqPLoop [
+      -- right hand
+      (0,1, note ("~ [~ g5] g6 [ds6 f6]" ) # soundPat),
+      (2,3, note ("~ [~ g5] g6 [ds6 d6]" ) # soundPat),
+      -- left hand
+      (0, 1, note (notePat ) # soundPat |+| note "ds4"),
+      (1, 2, note (notePat ) # soundPat  |+| note "as4" ),
+      (2, 3, note (notePat ) # soundPat |+| note "ds4"),
+      (3, 4, note (notePat ) # soundPat |+| note "c5" )
+      ]
+    }
+
+
+-- prechorus bit
+do
+    {
+      -- resetCycles;
+      d1 $ slow 1 $ seqPLoop [
+      -- right hand
+      (0,1, note ("~ [g5, as5, d6] [as5,d6,g6] [[g5, as5, d6] [g5, as5, ds6]]" ) # soundPat),
+      (2,3, note ("~ [g5, as5, d6] [as5,d6,g6] [[g5, as5, d6] [g5, as5, ds6]]" ) # soundPat),
+      (3,4, note( "[~ [g5, as5, ds6]] [~ [g5,as5,f6]] [~ [g6 f6]] [ds6 ds6]") #soundPat),
+      -- left hand
+      (0, 1, note (notePat2) # soundPat |+| note "g3"),
+      (1, 2, note (notePat2) # soundPat |+| note "ds3" ),
+      (2, 3, note (notePat2) # soundPat |+| note "g3"),
+      (3, 4, note (notePat2) # soundPat |+| note "ds3" )
+      ]
+    }
+
+--- chorus how to transition from the above bit?
+do
+    {
+      resetCycles;
+      d1 $ slow 1 $ seqPLoop [
+      -- right hand
+      (0,1, note ("~ [[ds6,g6,as6] [ds6,g6,as6]] [ds6,g6,as6] [[as5, ds5, g6] [as5, d6, f6]]" ) # soundPat),
+      (1,2, note ("~ [[d5,f5,as5] [d5,f5,as5]] [~ g6] [~ [c6, ds6, g6]]" ) # soundPat),
+      (2,3, note ("~ [[c6, ds6, g6] [c6, ds6, g6]] [~ [g5,c6,ds6]] [~ [g5,as5,d6]]") # soundPat),
+      (3,4, note( "~ [[g5,as5,d6] [g5,as5,d6]] [~ as5] [c6 [ds5, gs5,c6]] ") #soundPat),
+      (4,5, note ("~ [~ gs5] [ds5,gs5,c6] [as5, c6, ds6]" )  #soundPat),
+      (5,6, note ("[f5, as5, d6] [f5, as5, d6] [as5, c6, ds6] [as5, c6, f6]") #soundPat),
+      -- left hand
+      (0, 1, note (notePat) # soundPat |+| note "ds4"),
+      (1, 2, note (notePat) # soundPat |+| note "as3" ),
+      (2, 3, note (notePat) # soundPat |+| note "c4"),
+      (3, 4, note (notePat3) # soundPat |+| note "g3" ),
+      (4, 5, note (notePat) # soundPat |+| note "gs3") ,
+      (5, 6, note (notePat2) # soundPat |+| note "f3")
+      ]
+    }
+
+
+-- make it vibey
+d2
+$ every 4 (0.125 <~)
+$ every 5 (crushit.(rip 0.125 0.25))
+$ stack [
+every 4 (#sp "-1") $ every 5 (chop "<2 4 8 12>") $ s "amencutup*8?" #n (irand 8) #g 1.15,
+whenmod 10 5 (0.125 <~) $ s "ss" # shape "0.2",
+rarely ((# s "bulmacp") . (# n (irand 10)) . (# speed (range 0.8 1.2 $ slow 1.1 rand)).(#g 0.9)) $
+s "[k(3,8,<0 1>), <bulmakd:8*4? bulmakd:10*4>]"  #shape 0.3
+]
+#nudge 0.2 #shape 0.1
