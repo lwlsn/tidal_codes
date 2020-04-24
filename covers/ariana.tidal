@@ -1,0 +1,30 @@
+do
+  let mix = [0.9,0.95,1.1,1.2,1.11] -- 1.1,0.95,1.4,1.1,0
+  d1 $ slow 2 $ str 32
+    -- $ rarely (jux (loopAt 2))
+    -- $ rarely (#accelerate "0.2 -0.25")
+    $ stack [
+      fast "0.25" $ struct "t(3,8)%2" $ s "Ari:2/2" #sp "[0.5, 1.5]"
+    ] # orbit 0
+    |*| g (mix!!0)
+  d2 $ stack [
+      s "k(<3 5>,8,<0 1 2>)" #g 0.9 #shape 0.25,
+      stz 3 0.125 0.8 $ s "[ krane:1 ~ ~ ~]/4" #sp 0.75,
+      degradeBy "<0.1 0.8>" $ sound "ifdrums(5,8,<0 1>)" # n (iter 4 "0 5 6 8 9 10 12 13 14")
+      # coarse "2 4 6" # speed (choose [0.25, 1.25, 0.5]) # shape "0.3" # gain "0.8"
+    ]
+    # g (mix !!1) #orbit 1
+  xfi 3 8
+    $ slow "<2>"
+    $ rarely (jux (#speed "-0.5"))
+    $ note ( "gs5 ~ as5 [~ c6] c6 [~ gs5][cs6 c6]" )
+    # s "jsyn:2" # ctf 2800 #lpq 0.2 #coarse "<24 12 8 0>"
+    # g (mix!!2) #room 0.85 #size 0.85 #orbit 2
+  xfi 4 8
+    $ every 10 (|+| note "12")
+    $ note "<gs5 [~ f5] c5 <ds5 ds4>>(<3 5>,8,<2 1 0>)" # s "GBass:4"
+    #sus "1" #release "0.4"
+    #g (mix!!3)  #orbit 3
+  xfi 5 8 $ (#accelerate "2 0.2")
+    $ slow 4 $ str 126 $ s "<Ari:1 Ari:0>"
+    # sp "[0.75, 1.5]"  # g (mix!!4)
