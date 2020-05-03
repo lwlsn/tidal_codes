@@ -1,16 +1,17 @@
 setcps (140/120/2)
 
 
-let soundPat = s "supersaw" # sus 0.4 #rel 0.4 
+let soundPat = s "supersaw" # sus 0.4 #rel 0.4
                 #lpf (range 1200 3400 $ slowersine) #lpq (range 0.1 0.2 $ slowersine)
     bassPat = s "ABass:2" # shape 0.8 # sus 0.6 #rel 0.4
 
 d2
-$ every 4 (0.25 <~)
-$ every 5 (crushit.(rip 0.125 0.25)) 
+$ every 5 (crushit.(rip 0.25 0.25))
+$ every 6 (#hpf "200 400 1800" )
+$ every 8 (chop 2)
 $ stack [
-s "[bulmakd:4, k]*4" #lpf 1200 # shape 0.7, 
-s "[~ <sn:3 cps1:1>]*2" # end 0.7 #lpf 5000, 
+s "[bulmakd:4, k]*4" #lpf 1200 # shape 0.7,
+s "[~ <sn:3 cps1:1>]*2" # end 0.7 #lpf 5000,
 s "~ hatys" #n (irand 20)
 ] 
 -- #nudge 0.2
@@ -23,14 +24,23 @@ do
       d1 $ slow 1 $ seqPLoop [
       -- synth line
       (0,1, note ("~ [~ gs5] [gs5 g5] [g5 f5]" ) # soundPat),
-      (1,2, note ("f5 f5 g5 [g5 g5]") # soundPat), 
-      (2,3, note ("[~ gs5] [~ gs5] [gs5 g5] [g5 f5]") #soundPat ), 
+      (1,2, note ("f5 f5 g5 [g5 g5]") # soundPat),
+      (2,3, note ("[~ gs5] [~ gs5] [gs5 g5] [g5 f5]") #soundPat ),
       (3,4, note ( "f5 [gs5 as5] [~ gs5] [g5 [gs5 gs5]]") #soundPat),
-      -- (4,5, note ("f5") #soundPat),
-      -- bassline 
-      (0,1, note ("~ ~ ~ ~") #bassPat), 
+      (4,5, note ("f5 [~ [gs5*2]] [gs5 g5] [g5 f5]") #soundPat),
+      (5,6, note ("f5 gs5 ds5 [~ [gs5*2]] ") #soundPat),
+      (6,7, note ("[g5 f5] [g5 ds5] gs5 [~ [gs5 g5]]") #soundPat),
+      (7,8, note ("gs5 ds5 ds5 [~ ds5] ") # soundPat),
+      (8,9, note ("[as4] ~ ~ ~ ") # soundPat),
+      -- bassline
+      (0,1, note ("~ ~ ~ ~") #bassPat),
       (1,2, note ("[ cs5] [~ cs5] [~ ds5] [~ ds5]") #bassPat),
       (2,3, note ("[~ f4] [~ f4] [~ f4] [~ f4]") #bassPat) ,
-      (3,4, note ("[~ cs5] [~ cs5] [~ ds5] [~ ds5]") #bassPat) 
+      (3,4, note ("[~ cs5] [~ cs5] [~ ds5] [~ ds5]") #bassPat),
+      (4,5, note ("[~ f4] [~ f4] [~ f4] [~ f4]") #bassPat) ,
+      (5,6, note ("[~ cs5] [~ cs5] [~ gs4] [~ gs4]") #bassPat),
+      (6,7, note ("[~ ds5] [~ ds5] [~ f4] [~ f4]") #bassPat),
+      (7,8, note ("[~ gs4] [~ gs4] [~ gs4] [~ gs4]") #bassPat),
+      (8,9, note ("[~ ds5] [~ ds5] [~ ds5] [~ ds5]") #bassPat)
       ]
     }
