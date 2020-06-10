@@ -1,0 +1,38 @@
+setcps(178/120/4)
+
+d3 
+$ stack [
+ s "[k*4, bmkd:2(5,16)]" #lpf 2200 #shape 0.5,
+  s "[hh27:4*16, sn:3*4]"
+  ]
+
+
+d1 $ note (slow 1 $ "[<b4 b4 gs4 fs4> ] [~ <b4 b4 gs4 fs4> ] [~] [<b4 b4 gs4 fs4> ] [~ <b4 b4 gs4 fs4> ] <b4 b4 gs4 fs4> [<ds5 cs5 as4 e4> <ds5 cs5 as4 e4> ] <ds5 cs5 as4 e4>") 
+# s "[ABass:1, fm-bass:8]"
+#sus 0.4 #rel 0.4 #speed "[1,1.02]" #gain 1.4
+
+
+let soundPat =  s "[ghoblin, jsyn:2]" # rel 0.5 # sp "[1,1.02]" # room 0.4 # sz 0.7 # velocity 0.8 # lpf 2300
+
+
+do
+    {
+      d2 $ slow 1 $ seqPLoop [
+      (0,1, note ("[fs5, b5, ds6]  [~ [as5, cs6, fs6]]" ) # soundPat),
+      (1,2, note ("[fs5, b5, ds6]  [~ [gs5, cs6, e6]]" ) # soundPat),
+      (2,3, note (" [gs5, b5, ds6]") # soundPat),
+      (3,4, note (" [fs5, as5, cs6] [~ [fs5, as5, cs6]] ~ [[fs5, as5, cs6]] ~ ~ ~ ~ ") # soundPat)
+    ]
+  }
+
+
+
+  do
+      {
+        d4 $ slow 1 $ seqPLoop [
+        (0,1, note ("fs6 [~ e6] ~ ds6 b5 ~ ~ ~ " ) # soundPat),
+        (1,2, note ("fs6 [~ e6] ~ ds6 b5 ~ ~ ~ " ) # soundPat),
+        (2,3, note ("b6 [~ as6] ~ fs6 ~ ~ ~ ~ ") # soundPat),
+        (3,4, note (" as6 [~ fs6] ~ cs6 ~ ~ ~ ~") # soundPat)
+      ]
+    }
