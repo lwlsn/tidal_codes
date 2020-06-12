@@ -1,3 +1,6 @@
+--- i think this set is cursed tbh, let's leave it alone from now on ---
+
+
 let measures n p ms = (n, p):ms
     loopend n p = measures n p []
     songLoop ms = seqPLoop $ structureSong 0 ms
