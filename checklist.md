@@ -1,3 +1,3 @@
 ## hello world 
 
--[x] does this work? 
+<ul><li>[x] item1</li><li>[ ] item2</li></ul>
