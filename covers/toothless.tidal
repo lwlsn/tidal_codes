@@ -1,0 +1,4 @@
+d2 $ note (slow 2 $ "[as6 fs6] [cs7 gs6] [[as6 gs6] ~] ~ [b6 as6] [b6 as6]  < ~ [gs6 fs6]> ~") 
+ #soundPat #gain (choose [0.85,0.88..1.1])
+
+d3 $ degBy 0.25 $ note (slow 2 $ "[fs5 fs4]*4 [gs5 gs4]*4 [f5 f4]*4 <~ [fs5 fs4]*4>") # sound "superreese"
