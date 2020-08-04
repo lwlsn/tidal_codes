@@ -1,0 +1,182 @@
+------ f p -------
+
+setcps(135/120/2)
+
+
+d1 $ s "k*4?"
+
+do
+  let vpat = "{1 1 1*2 [~ 1] ~}%8"
+  let kmod x = (stut' x (0.125/2) ((|*| gain (shift' 282 $ (range 0.3 0.9 $ rand)))))
+  d1
+    $ kmod 2
+    -- $ off 0.125 (+| n "1 2")
+    $ whenmod 24 23 (#hpf "200 400 1800")
+    $ stack [
+      shift' 282 $ slice 16 "[0*2 2 3(3,8) 4]" $ stut' 3 (0.125/2) (|*| gain "0.75" ) $
+      gain vpat # s "ABass:2" #end "0.4" # g 0.9,
+      fast "<0.5 2>" $ note "{-5/2 ~ ~ ~ ~ ~ ~}%8" # s "GSynth:7" # end "0.4" # g 1.1
+    ]
+    #lpf (range 200 2000 $ slowersine)
+    |+| note "<0 -12  >"  # g 0.95
+  xfi 2 8
+    $ fast "< 2 0.5 1 0>"
+    $ every 2 (|+| note "-12 12")
+    $ whenmod 24 23 (#acc "-0.2 0.8")
+    $  s "ASynth:2(<5 7>,8,<0 12 2>)"
+      # note (choose [0,-2,3,79,14])
+      |+| note "<0 -12  12 0>"
+      #room 0.2 #phasr (range 1 8 $ slowersine)
+  d3 $ often randDelay $ shift $ rarely (stut' 2 (0.125/2) ((|*| gain (shift' 282 $ (range 0.7 0.9 $ rand))) . (|+| n "1"))) $
+      shift $ sometimes (stut' 2 (0.125) ((|*| gain (shift' 288 $ (range 0.7 0.9 $ rand))) . (|+| n "1") )) $
+      shift $
+        slow 1 $ gain (vpat)
+          # s "k"
+          # n (irand 20)
+  d4 $ stack [
+    degBy 0.2 $ every 4 (fast 2) $ s "hatys*8" # n (irand 16) # g 0.8 # sp 0.8 # hpf "<200 500 1200 1500>",
+    whenmod 7 4 (jux (iter 4)) $ every 2 (const $ silence) $ s "idmhit1:5*2 ~ ~ ~" # sp 0.8,
+    whenmod 8 4 (0.125 ~>) $ whenmod 7 4 (slow 2) $ struct "<t*2 >" $ s "cp:0" # sp (range 0.75 1.5 $ slowersine) # g 0.8
+    ]
+
+
+d2 shh
+
+all $ ((#hpf "200 400 800 1.2e3" ).(#acc "-0.2"))
+
+all $ (#hpf 0)
+
+all $ (#lpf "500")
+
+all $ (# lpf "20000")
+
+once $ s "adeej" # sp "-0.5" # n (irand 16)
+
+7-12
+
+{--- changes
+
+INTRO
+
+cp & drone note
+
+bells --> almostNever accelerate
+
+kicks slow 4, 2
+
+add some glitches in
+
+==> everything through all variable
+
+
+vpat ==> faster on 2 and 3rd
+
+shift d1 >> up 12, 24
+
+
+end ==> all through lpf
+
+---}
+
+
+
+
+
+---- try this one
+
+-- start with underwater phonecall?
+
+let soundPat  = s "[ghoblin, ASynth:0]"  #sp "[1,1.02]" # sus 0.8 # rel 1
+
+let chordPat = "[[d6,f6] [[as5, f6,d7] [as5, f6, a6,d7]] [f6, as6] [[as6, c7] [c7, a6]]]/8"
+
+
+d6 shh
+
+
+do
+  d5
+    $ loopAt 24 $ str 64
+    $ every 4 (chunk 2 (hurry 2))
+    $ sometimes ((#acc "-0.2 0.2").(#hpf "200 400"))
+    $ s "vox:1"
+    #hpf "400"
+    #g 0.92
+  d3
+    $ note "<d6 <d7 a7>>*8?"
+    # soundPat
+    #gain 0.9
+    |+| note "< 0 >"
+    #lpf (1400)
+    -- #orbit 2 #pan 2
+
+clutchIn 5 8
+  $ chew "2 4 8 2" "3(1,8) 2*h2 1 0"
+  $ degBy 0.2
+  $ begin ( off 0.125 (+0.25) " 0.1 0.5 [~ 0.2] 0.75" )
+  # sound "<namevox yo>" #n (irand 8) # sustain 0.2
+  # accelerate "0.8 -0.2"
+  #sp "[1 0.5 2.0 0.25]/4"
+  # hpf 20 # hpq 0.3
+  #ctf 8000 #g 0.77
+  -- #orbit 0 #pan 0
+
+xfi 4 8
+$ whenmod 24 23 (const $ silence)
+  $ rarely (palindrome)
+  $ degBy 0.125
+  $ note (fast "<2 4>" $ arp "<converge down diverge up>" $ chordPat)
+  |+| note "<-12 0>" # soundPat
+  -- #orbit 1 #pan 1
+
+
+once $ s "tekken-bell:1" #acc "<-0.8 -2>" #sp 0.5 # g 1.1
+
+
+d1
+$ sometimes (off 0.125 ( |+ n " 1 2 3"))
+$ note "<d5 d5 <as4 f5> a4>(7,16)" -- add f5
+-- $ degBy 0.5 $ gain "1(7,16)"
+# sound "[ ABass:4]" #shape 0.4 # sus 0.4 # rel 0.4
+# speed "[1, 1.02]"
+#cutoff (range 500 15000 $ slowersine)
+|+| note "0" #gain 0.92
+-- #note (wchoose [(2, 0.5), (-2, 1/6) , (-3, 1/6), (5, 1/6)])
+-- #orbit 3 # pan 3
+
+
+do
+  unsolo 1
+  unsolo 4
+
+do
+  let structA = "[t] f f [t f t f]"
+      structB = "f f t [f t]"
+  d2
+    $ every 8 (chunk 2 (chop 2))
+    -- $ someCyclesBy 0.44 (degrade)
+    $ every 10 ((rev.palindrome))
+    $ stack [
+      every 4 ((#speed "-0.75").(#hpf "200")) $ s "<amencutup dr>*8?"
+      #n (irand 16) # coarse "2 4 6" # speed (choose [0.8, 0.7, 0.5]) # shape "0.3" #gain 0.77,
+      struct (structB) $ s "007kit2:2",
+     fast 1 $ struct (structA) $ sound "[bmkd:3, k]" #cutoff 1800 # cut "2",
+     slow "1 2" $ sometimes (fast 2) $ every 4 (0.25 <~) $ s "[k(3,8,<0 1 2>),  bmkd:2*2]"
+     #lpf 1800 #shape 0.4 #gain 0.88,
+     jux rev $ s "007kit1:3*16?" #cutoff 1800 #pan (range 0.5 1 $ sine*2) #sp (range 1 4 $ sine*0.5)
+     #g 0.9
+    ] |*| gain "0.98"
+    -- # orbit 4 #pan 4 -- # room 0.1 #size 0.2
+
+all $ (every 8 (#squiz "2 4")) . (every 9 (#hpf  "200 400 1200 "))
+
+all $ (#hpf "0")
+
+
+d2 shh
+
+
+
+
+
+hush
