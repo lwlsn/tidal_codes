@@ -1,0 +1,116 @@
+setcps(140/120/2)
+
+
+hush
+
+all $ (#hpf "20")
+
+do
+  all $ (#hpf "20")
+  let randDelay p =
+                  (# delay (range 0.5 0.8 $ shift' 1881 $ rand)) $
+                  (# delayt (shift' 1882 $ (choose [(1/4096),(1/2048)..(1/32)]))) $
+                  (# delayfb (range 0.5 0.9 $ shift' 1883 $ rand)) $ p
+  let pat = "{1 1*2 ~ ~ ~ 1 ~ 1*2 1 ~ 1 1 ~ ~ [~ 1] ~ 1 [~ 1] ~ 1 ~}%8"
+      slowPat = "{1 1*2 ~ ~ ~ 1 ~ 1*2 1 ~ 1 1 ~ ~ [~ 1] ~ 1 [~ 1] ~ 1 ~}%4"
+  let modFunc p = every 6 (crushit.(rip 0.25 0.125)) $
+            every 9 (rarely (shift . randDelay)) $ shift' 2 $
+            every 11 (#hpf "200 400 1800" ) $
+            every 12 (chop 2) $
+            every 13 (# accelerate "-2 0.2") $
+            every 20 (# coarse (choose [4..16])).(#crush (choose [8..12])) $
+             p
+  once $ s "tekken-bell:3" #acc "<2 4 >" #sp 0.5 # g 1.1
+  -- once $ s "tekken-grunt"
+  xfi 1 8
+    $ every 4 (|*| speed "0.5 2.0 3.0 4.0")
+    $ every 5 (jux (|*| speed " 2.0 0.5 4.0 1.0"))
+    $ slow "<1 0.5>" $ stz 5 0.125 0.8
+    $ s "bmb([3 5], 8,2)/3"  # sus 0.9 #rel 1.23 #n (choose [7,8])
+    -- $ s "bmdrone" #n (choose [1,3])
+    #sp "<2 4 8 0.5>"
+    #vowel "<a e o>"
+    # pan (range 0 1 $ slow 2 isaw * 0.9)  #gain 0.89
+  -- d2 $ modFunc
+  --   -- $ whenmod 24 22 ( const $ shh)
+  --   $ stack [
+  --   rarely ((# s "bmcp") . (# n (irand 10)) . (# speed (range 0.8 1.2 $ slow 1.1 rand))) $
+  --   slow 1 $ whenmod 7 4 (|+| n "6") $ gain (pat) # s "bmkd:2" #sus 0.45 #lpf "<1200 2400 >" #shape 0.5,
+  --   whenmod 10 5 (0.125 <~) $ s "ss" # shape "0.2",
+  --   gain (slowPat) # sound "bmst:2" # cut "1" # n (irand 4) # speed "0.5 1" # shape "0.1" #g 0.93
+  --   ] |*| g "0.975"
+  d3 $ rarely (#acc "-0.5 0.2")
+    $ s "wet(3,8,<0 1>)?"
+    # n (irand 16)
+    # sp "<-0.5 0.25>"
+    # g 0.97
+  d4 $ s "tekken-upfx/4" #n (irand 3 ) #sp "<2 1 0.5 1>"
+    #coarse "<2 4 8 12>"
+
+
+hush
+
+---- song structure ?? ---
+
+
+let randDelay p =
+                (# delay (range 0.5 0.8 $ shift' 1881 $ rand)) $
+                (# delayt (shift' 1882 $ (choose [(1/4096),(1/2048)..(1/32)]))) $
+                (# delayfb (range 0.5 0.9 $ shift' 1883 $ rand)) $ p
+
+let pat = "{1 1*2 ~ ~ ~ 1 ~ 1*2 1 ~ 1 1 ~ ~ [~ 1] ~ 1 [~ 1] ~ 1 ~}%8"
+    slowPat = "{1 1*2 ~ ~ ~ 1 ~ 1*2 1 ~ 1 1 ~ ~ [~ 1] ~ 1 [~ 1] ~ 1 ~}%4"
+
+setcps(150/120/2)
+
+-- introoo
+
+do
+  all $ (#hpf "20")
+  let modFunc p = every 6 (crushit.(rip 0.25 0.125)) $
+            every 9 (rarely (shift . randDelay)) $ shift' 2 $
+            every 11 (#hpf "200 400 1800" ) $
+            every 12 (chop 2) $
+            every 13 (# accelerate "-1.5 0.2") $
+            every 20 (# coarse (choose [4..16])) $ p
+  -- once $ s "tekken-bell:3" #acc "<-0.8 -2>" #sp 0.5 # g 1.1
+  d1
+    $ every 8 (|*| speed "0.5 2.0 3.0 4.0")
+    $ every 9 (palindrome)
+    $ sometimes (crushit.(rip 0.125 0.25))
+    $ stz 3 0.125 0.8
+    $ s "bmb([3 5 7], 8, <0 2 10 2>)" #n (choose [7,8]) # sus 0.99 #rel 0.77
+    -- $ s "bmdrone" #n (choose [1,3]) # sus 1.4 #rel 2.8
+    #note (choose [0,3,12,7])
+    #sp "<1 2 0.5 2>" # hpf 80 # g 0.975
+    #orbit 0 # pan 0
+  d2
+    $ modFunc
+    $ stack [
+      rarely ((# s "bmcp") . (# n (irand 10)) . (# speed (range 0.8 1.2 $ slow 1.1 rand))) $
+      slow 2 $ whenmod 7 4 (|+| n "6") $ gain (pat) # s "bmkd:2" #sus 0.45 #lpf "<1200 2400 >" #shape 0.5,
+      whenmod 10 5 (0.125 <~) $ s "ss" # shape "0.2",
+      gain (pat) # sound "bmst:2" # cut "1" # n (irand 4) # speed "0.5 1" # shape "0.1" #g 0.88
+    ] |*| g "0.975"
+    #orbit 1 # pan 1
+  -- d3 $ rarely (#acc "-0.5 0.2")
+  --   $ degBy 0.25
+  --   $ s "<revkit wet>(5,8,<0 1>)?"
+  --   # n (irand 16)
+  --   # sp "<-0.75 0.5>"
+  --   # g 0.9 # hpf 800 #lpf 3000
+  --   #orbit 2 #pan 2
+  -- d4 $ s "tekken-upfx/4" #n (irand 3 ) #sp "<2 1 0.5 1>"
+  --     #coarse "<2 4 8 12>"
+  --     #orbit 3 # pan 3
+
+
+d1
+$ every 8 (|*| speed "0.5 2.0 3.0 4.0")
+$ every 9 (palindrome)
+$ sometimes (crushit.(rip 0.125 0.25))
+$ stz 3 0.125 0.8
+$ s "bulmab([3 5 7], 8, <0 2 10 2>)" #n (choose [7,8]) # sus 1.2 #rel 0.9
+-- $ s "bulma-drone" #n (choose [1,3]) # sus 1.4 #rel 2.8
+#note (choose [0,3,12,7])
+#sp "<2 1>" # hpf 80
