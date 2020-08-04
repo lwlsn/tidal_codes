@@ -1,0 +1,49 @@
+setcps(160/120/2)
+
+d1
+$ every 5 (jux (|*| speed " 0.5 1.5"))
+-- $ whenmod 7 4 (#sp (0.625))
+$ loopAt 8 $ chop 8 $ s "erokia-loops:3"
+
+d2 $ stack [
+-- gain "{~ ~ 1 ~}%8" # s "hatys" #n (irand 3),
+-- gain "{1(3,8, <0 2 1>)}" # s "[bmkd:2, k]" #shape 0.4 #lpf 1200,
+gain "1*8?" #sound "amencutup" # n (irand 8)
+-- s "k*4"
+]
+
+
+resetCycles
+
+do
+  let notePat = "{[a4 c5] [~ a4] [d5 ] [a4 e5] [~ a4] [f5] [e5 d5] ~ [e5 f5] [~ d5] [e5] [c5 d5] [~ c5] [d5] [c5 b4] ~}%4"
+      bassPat = "{a3 b3 <c4 f3> [<d4 e3> <e4 d4>]}%1"
+      highPat = "{e6 e6 [f6 f6] [~ e6] ~ ~ ~ ~ c6 c6 [d6 d6] [~ c6] ~ ~ ~ ~ }%4"
+  d3
+    -- $ rarely (palindrome)
+    -- $ off 0.25 (|+ note "12" )
+    $ note ( notePat )
+    # s "midi1"
+    #sus 0.4 #rel 0.4
+    -- #lpf 1400
+  d4 $ note (bassPat) # s "midi2"
+  d5 $ note (highPat) # s "midi3" |+| note "0"
+
+d5 shh
+
+  d1
+     -- $ str 8
+     $ sometimes ( # acc "<2 -0.5>")
+      $ s "tekken-annoucer/4"
+      # n (irand 8)
+      #g 1.02
+
+
+xfi 5 8
+  $ str 2
+  $ every 5 ((#lpf "800 400 200 ").(rep' 2).shift)
+  $ (spin 2.(#vowel "<a e o>"))
+  $ s "tekken-perc"
+  # n (irand 16 + 12)
+  # sp "-2 -0.5"
+  #g 0.9
