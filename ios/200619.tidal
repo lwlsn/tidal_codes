@@ -1,0 +1,100 @@
+
+setcps(135/120/2)
+
+resetCycles
+
+d3 shh
+--- intro ---
+
+do
+  xfi 2 16
+    $ every 4 (|*| speed "0.5 4.0 2.0 3.0")
+    $ every 5 (jux (|*| speed " 2.0 4.0"))
+    $ whenmod 7 4 (#sp (0.625))
+    $ slow 8 $ chop 16 $ str 8 $ s "mel:1" -- mel 1
+    -- $ loopAt (8) $ chop 8 $ str 8 $ s "lizzie:1"
+    #sp ("<0.625/2>")
+    #g 1.15
+    #pan (perlin*0.5+0.25)
+  xfi 4 8
+      $ rarely (#accelerate "0.4 -0.1")
+      $ s "[cloudpad(3,8)]/4"
+      # sp "<1 <<2 [4 2]> 0.5>>"
+      #n (choose [0,4])
+      #coarse 8 #vowel "<a e o>" #shape 0.2
+      # g 0.9
+
+
+d3
+$ sometimes (jux (palindrome))
+$ stz 6 (0.125) 0.8
+$ note "<c5 d5 g5 fs5>(3,8)" # s "fm-bass:4"
+#shape 0.6
+
+xfi 3 16
+  $ sometimes (jux (palindrome))
+  $ (0.125 <~ )
+  $ sometimes (off 0.125 (+| n "0 1 "))
+    $ note "<<e5 f5> <e5 g5> <<f5 f4> c5> a4>(3,8) ~"
+    # s "[ABass:1,fm-bass:2]" #sp "[1,1.02]" #g 0.87 #shape 0.4
+    -- |+| note 1
+
+
+d3 shh
+
+
+d1
+$ every 4 (0.25 <~)
+$ every' 8 6 (brak)
+-- $ sometimes (spin 2)
+$ stack [
+  every 2 (stut' 3 (0.125/2) (|*| sp 1.5)) $ s "~ ~ ~ jhit:1" # sp 1.5 # g 0.8,
+  s "hatys(9,16)?" #n (irand 8) # sp 1.5 #acc "0.2 0.8 0.01 -1",
+  slow "<1 2>" $ s "[k(<5 7 8>,8,<10 2 8>)]" #shape 0.55 #ctf 1200 # g 1.09,
+  sometimes (fast "0.5" ) $
+  gain "1.05*16"
+# s (choose  ["idmhit2", "revkit"]) --,
+ #n (irand 16) # speed "[0.75 0.5]/16" #acc "0.2 0.8 0.01 -1"
+] #g 0.99
+
+
+
+d1
+ $ str 4 $ chop 2
+ $ degBy 0.6
+ $ sometimes (stz 3 0.125 0.8)
+ $ often (#acc "-2 2")
+ $ s "yo(7,8,<0 1>)?"
+ # n (irand 2)
+ # sp "<-0.5 2>"
+ # g 0.95
+ # crush 6 # coarse "12"
+ #pan (perlin*0.25+0.33)
+
+
+all $ ((#hpf "800").(#coarse 12))
+
+all $ (#hpf 20)
+
+all $ (#sp "-0.25")
+
+
+
+{- structure
+tekken hits
+bass and melody
+
+basic rhythmic patterns
+
+something here?
+
+d1 > yo
+
+hpf up , coarse up
+
+add full drums
+
+hpf >0
+
+
+- }
