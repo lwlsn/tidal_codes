@@ -1,3 +1,5 @@
+let soundPat = sound "" # speed "[1,1.02]" -- what samples?
+
 d2 $ note (slow 2 $ "[as6 fs6] [cs7 gs6] [[as6 gs6] ~] ~ [b6 as6] [b6 as6]  < ~ [gs6 fs6]> ~") 
  #soundPat #gain (choose [0.85,0.88..1.1])
 
