@@ -1,0 +1,12 @@
+setcps (120/120/2)
+
+resetCycles
+
+    do
+      let pat = "{[1 1] 1 [1 1] 1 [1 1] [1 1] [1 1] [1 1] [1 1] [1 1] [1 1] [1 1] [1 1] [1 1] [1 1] [1 1] [1 1] [1 1] [1 1] [1 1] [1 1] 1}%4"
+      d1 $ gain (pat) # note (slow 2 $ "[cs5,gs5] [c5,as5] [f5, gs5] [gs5, c6]")
+        # sound "ghoblin"
+        # speed "[1,1.02]"
+      d2 $  chop 24 $ jux (rev) $ struct (fast 2 pat) $ s "amencutup" # sp "<0.8 -0.5>"
+        #n (irand 16) #pan (range 0.5 1 $ slowersine) 
+      d3 $ fast 2 $  rarely (0.25 <~) $ s "[k(3,8,<0 1 2>), bmkd:2]" #shape 0.5 # lpf 1200
