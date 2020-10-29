@@ -1,0 +1,193 @@
+setcps (141/120/2)
+
+all $ id
+
+
+resetCycles
+
+
+let weee p =  fast "[1 [1 2] [1 [1 0.5]] [1 [1 1.5]]]/4"
+                $ every 6 (jux (rev) . (# hpf "130 1300"))
+                $ every 8 ((# pan rand) . (# up (scale "major" (run 8)))) $ p
+
+
+do
+  let kPat = "{1 [~ 1 ] ~ ~ [~ 1] ~ 1 ~}%4"
+      hPat = "{1 [~ 1] [1*3 ~] ~ 1 [1 1] [~ <~ 1>] <~ 1>}%4"
+      hPat2 = "{~ ~ ~ < ~ [~ 1*3]>}"
+  d1
+       -- $ qtrigger 1
+      $ stack [
+        note ("[f6,<as5 <gs5 f5>>] [~ ds6] <f6 <as6 gs6>>(<1 1 2 1>,7) fs6" ) -- # s "midi1" 
+         # s "ser:1"
+    ] -- #nudge 0.04
+      # coarse "2 2 4 8"
+      |+| note "0"
+      |+| note "<-12 -12 -12 0>" 
+      #orbit 0 #pan 0
+  xfadeIn 2 4
+    $ loopAt 2 $ chop "< 8 12 24 >" $ rarely (#accelerate  "0.2 -0.8")
+    $ s "misc-vox" #gain 0.82 -- #nudge 0.05 
+    #orbit 1 #pan 1
+  xfadeIn 3 8
+    $ rarely (#accelerate  "0.2 -0.8")
+    $ stack [
+    fast 4 $ s "~ cosmic:1"  |*| gain 1.02,
+    rarely (jux (iter 4)) $ slow 2 $ s "~ alcp ~ alcp:1" |*| gain 0.92 #up 10
+    ] -- #nudge 0.05
+    # gain 0.92
+    #orbit 2 #pan 2
+    # cutoff (range 1000 4000 $ slowersine)
+
+
+
+do
+  let hPat = "{1 [~ 1] [1*3 ~] ~ 1 [1 1] [~ <~ 1>] <~ 1>}%4"
+      hPat2 = "{~ ~ ~ < ~ [~ 1*3]>}"
+  d1
+    $ every 4 (|+| note "-12 12 0 7")
+    $ every 5 (jux (|+| note "12 -12"))
+    $ rarely (off 0.125 (|+ n "1 2").(|*| gain 0.8))
+    $ stack [
+      note ("[f6,<as5 <gs5 f5>>] [~ ds6] <f6 <as6 gs6>>(<1 1 2 1>,7) fs6" )   # s "ser:1",
+      note "{~ cs7 ~ ~ [~ fs7] cs7 ~ ~ [~ as6] ds7 ~ ~ ~ cs7 ~ ~}%4"  # s "ser:1"
+    ]
+    |+| note "-12" # pan 0 #orbit 0
+    -- #nudge 0.04
+  xfadeIn 4 16
+    $ note "{~ [gs4 as4] gs5  [~ gs5] ~ fs4 fs5 [~ f5] ~ [as4 ~] [cs5 fs5] [~ gs5] ~ fs4 fs5 [~ f5]}%4"
+    -- #s "midi2" 
+    # s "ser:2" # gain 0.77 #pan 3 #orbit 3
+    -- # nudge 0.04
+  d3
+      $ rarely (#accelerate  "0.2 -0.8")
+      $ every 5 (chunk 2 (chop 2))
+      $ weee
+      $ stack [
+      gain (hPat) # s "idmhit2:10" |*| gain 0.92,
+      gain (hPat2) # s "dr55" #note "-5" |*| gain 0.8,
+      fast 4 $ s "~ cosmic:1"  |*| gain 0.8,
+      rarely (jux (iter 4)) $ slow 2 $ s "~ alcp ~ alcp:1" |*| gain 0.9 #up 10
+      ]  #nudge 0.05
+      |*| gain 0.92 # cutoff (range 4000 8000 $ slowersine) 
+      #pan 2 #orbit 2
+
+
+
+xfadeIn 5 16
+      $ almostNever (off 0.25 (|+| note "<12>"))
+      $ note "{as4 [[as4 gs4] gs4] cs5 [[cs5 ds5] ds5]}%1"
+      -- # s "midi3"
+      # s "[ABass:2, fm-bass:8]" # speed "[1,1.02]" #gain 0.73
+      #pan 4 # orbit 4
+
+
+do
+  let kPat = "{1 [~ 1 ] ~ ~ [~ 1] ~ 1 ~}%4"
+      hPat = "{1 [~ 1] [1*3 ~] ~ 1 [1 1] [~ <~ 1>] <~ 1>}%4"
+      hPat2 = "{~ ~ ~ < ~ [~ 1*3]>}"
+  d6
+      $ slow 2
+      -- $ striate 2
+      $ note ("{cs8 ~ [~ c8] [<~ [cs8 c8] > gs7] f7 ~ [~ ds7] [ds7 <cs7 f7>]}%4" )  # s "ser:3"
+      |+| note "-24" 
+      #gain 1.12 #pan 5 #orbit 5 
+  d3
+    $ rarely ((iter "1 2").crushit)
+    $ someCyclesBy 0.21 (#accelerate  "0.2 -0.8")
+    $ stack [
+      every 4 ((#speed "-0.75").(#hpf "200")) $ s "<amencutup dr>*8?"
+      #n (irand 16) # coarse "2 4 6" # speed (choose [0.8, 0.7, 0.5]) # shape "0.3" #gain 0.825 ,
+      every 4 (0.25 <~) $ rarely (fast "<2 0.5>") $ gain (kPat) # s " cosmic:2" #shape 0.22,
+      weee
+      $ stack [
+      slow 2 $ s "~ als:3 ~ als:1" #n (irand 8) # up 5 #gain 0.81,
+      gain (hPat) # s "idmhit2:10" |*| gain 0.92,
+      gain (hPat2) # s "dr55" #note "-5" |*| gain 0.9,
+      fast 4 $ s "~ cosmic:1"  |*| gain 1.02,
+      rarely (jux (iter 4)) $ slow 2 $ s "~ cccp ~ alcp" |*| gain 0.91 #up 10
+      ]
+    ]
+    -- #nudge 0.05
+    |*| gain 0.89
+      #  pan 2 #orbit 2
+
+
+all $ every 4 ((#squiz "2 0 1 0").(#hpf "200 400 800 1200"))
+
+
+
+do
+  let kPat = "{1 [~ 1 ] ~ ~ [~ 1] ~ 1 ~}%4"
+      hPat = "{1 [~ 1] [1*3 ~] ~ 1 [1 1] [~ <~ 1>] <~ 1>}%4"
+      hPat2 = "{~ ~ ~ < ~ [~ 1*3]>}"
+  d2 silence
+  d3
+    $ rarely ((iter "1 2").crushit)
+    $ someCyclesBy 0.21 (#accelerate  "0.2 -0.8")
+    $ stack [
+      -- every 4 (0.25 <~) $ rarely (fast "<2 0.5>") $ gain (kPat) # s " cosmic:2" #shape 0.52,
+      slow 2 $ s "~ als:3 ~ als:1" #n (irand 8) # up 5 #gain  0.8,
+      -- gain (hPat) # s "idmhit2:10" |*| gain 0.8,
+      -- gain (hPat2) # s "dr55" #note "-5" |*| gain 0.9,
+      fast 4 $ s "~ cosmic:1"  |*| gain 0.975,
+      rarely (jux (iter 4)) $ slow 2 $ s "~ cccp ~ alcp" |*| gain 0.88 #up 10
+      ]
+      -- #nudge 0.05
+      |*| gain 0.89
+        #  pan 2 #orbit 2
+
+
+d6 silence
+
+d1
+    $ stack [
+        note ("[f6,<as5 <gs5 f5>>] [~ ds6] <f6 <as6 gs6>>(<1 1 2 1>,7) fs6" ) # s "ser:2",
+        note "{~ cs7 ~ ~ [~ fs7] cs7 ~ ~ [~ as6] ds7 ~ ~ ~ cs7 ~ ~}%4" # s "ser:2"
+      ]
+      #gain 0.8
+      #pan 0 #orbit 0
+      |+| note "-12"
+      
+
+d6 $ note "{[ds4 [[f4 ] ]] ds4 f4 fs4 [ds4 [[f4 ] ]] ds4 f4 gs4 cs5 c5 gs4 f4 [ds4 [[f4 ] ]] ds4 f4 cs4}%4"
+      -- #s "midi4" --
+       # s "ser:5" #gain 1 #legato 8
+      |+| note "24"
+      #pan 5 #orbit 5
+
+
+do
+  let kPat = "{1 [~ 1 ] ~ ~ [~ 1] ~ 1 ~}%4"
+      hPat = "{1 [~ 1] [1*3 ~] ~ 1 [1 1] [~ <~ 1>] <~ 1>}%4"
+      hPat2 = "{~ ~ ~ < ~ [~ 1*3]>}"
+  d6 $ note "{[ds4 [[f4 ] ]] ds4 f4 fs4 [ds4 [[f4] ]] ds4 f4 gs4 cs5 c5 gs4 f4 [ds4 [[f4 ] ]] ds4 f4 cs4}%4"
+            -- # s "midi4" -- # s "ser:5" #gain 1 #legato 8
+            |+| note "24"
+  d3
+    $ rarely ((iter "1 2").crushit)
+    $ someCyclesBy 0.21 (#accelerate  "0.2 -0.8")
+    $ stack [
+      every 4 (0.25 <~) $ rarely (fast "<2 0.5>") $ gain (kPat) # s " cosmic:2" #shape 0.52 #lpf "2000 3000 200 400 1200 800",
+      gain (hPat) # s "idmhit2:10" |*| gain 0.8,
+      gain (hPat2) # s "dr55" #note "-5" |*| gain 0.9,
+      rarely (jux (iter 4)) $ slow 2 $ s "~ cccp ~ alcp" |*| gain 0.88 #up 10
+      ]
+      -- #nudge 0.05
+      |*| gain 0.9
+
+
+d3 silence
+
+d6 silence
+
+-- end on bass (d5 & d1)
+
+hush
+
+
+
+-- for eq purposes 
+p "noise" $ s "w-noise" #legato 1 #gain 1.75
+
+p "noise" $ silence
