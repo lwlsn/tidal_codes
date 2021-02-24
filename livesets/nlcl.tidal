@@ -1,0 +1,121 @@
+-- v4 // consent --
+
+-- into tidal 118
+
+-- into simp
+
+-- sleeping plane
+
+-- below
+
+-- idmt patterns
+
+all $ id
+
+let modFunc = (# lpf (fast 4 $ range 400 10000 rand)) . (# room (fast 8 $ range 0.1 0.3 rand)) . (# delay 0.125) . (# pan (fast 8 $ range 0.25 0.75 rand)) . (|* lpq 0.2)
+
+d1
+$ every 2 rev
+$ every 3 (# speed "-1")
+$ every 4 (brak)
+$ every 8 (slow 2)
+$ whenmod 12 8 (iter 4)
+$ every 6 (palindrome)
+$ degradeBy 0.1
+$ sound "<cckit1 revkit>*16?"
+# n (irand 8)
+# shape 0.3
+# size 0.7
+# end 0.4
+# cut (choose [1,2..16])
+# gain 1.2
+
+
+d3
+$ stutWith 2 (0.253)
+(modFunc)
+$ degradeBy 0.3
+$ whenmod 6 4 (brak)
+$ every 4 (fast 2)
+$ stut' 3 0.125 (|*| gain "0.75")
+$ sound "<krane:2*8? krane:1*8?>"
+# rel 0.1
+# speed (fast 2 $ range 0.85 1.1 $ rand)
+# orbit 2
+# gain 0.98
+
+clutchIn 5 8
+$ someCyclesBy 0.21 (iter "1 2 1 2")
+$ sound "[ccstab:1(5,8)]" -- 1 to 5
+# shape 0.2
+# rel 0.2
+# up (scale "egyptian" (choose [0 .. 14]))
+# room 0.15
+# size 0.1
+# gain 1.1
+
+
+d4
+$ someCyclesBy 0.11 (iter "1 2")
+$ someCyclesBy 0.21 (#accelerate  "0.2 -0.8")
+$ every 4 (chop 2)
+$ every 8 (chunk 2 (hurry 2))
+$ stack [
+s "[k(3,8), bmkd:2*2]" #shape 0.47 #gain 1.1,
+s " [~ stress:2] [~ stress:2] [~ stress:2] [~ stress:2]", -- add in highhats
+every 4 (const $ gain ("1 ~ [~ 1] [~ 1]") # s "stress:1" # shape 0.3 ) $ gain "1 ~ ~ ~" # s "stress:1" # shape 0.3,
+every 4 (0.25 <~) $ s "~ cccp ~ [ ~ <cccp als:2>]"
+]
+
+
+xfadeIn 2 8
+  $ sometimes (off 0.125 (|+ n "2 4"))
+  $ gain "<1(3,8) 1(5,16) 1(5,16,4) 1(3,8)>" #note (choose [0,-2,3,7])
+  |+| note "<1 13>" #sound "[ABass:1, fm-bass:8]" #sus 0.4 #rel 0.53
+  #shape 0.6 #speed "[1,1.02]"
+  #hpf 50
+  # lpf (choose [1200, 1400..8000])
+  #lpq (choose [0.025, 0.05..0.125])
+  # gain (0.99)
+
+
+
+  do
+    let vpat = "{1 1*2 ~ ~ ~ 1 ~ 1*2 1 ~ 1 1 ~ ~ [~ 1] ~ 1 [~ 1] ~ 1 ~}%8"
+    -- kicks and claps
+    d3
+      $ stack [
+        (0.125 <~) $ rarely ((#s "bmcp:0") . (# speed (range 0.8 1.2 $ slow 1.1 rand)).(#gain 0.85)) $
+         gain (vpat) # sound "[k, bmkd:2]" # lpf "1800" # shape 0.57 #gain 0.8
+      ] #gain (0.94)
+    -- hits, snares, breaks
+    d4
+      $ stack [
+        every 4 ((#speed "-0.75").(#hpf "200")) $ s "<amencutup dr>*8"
+        #n (irand 16) #coarse "2 4 6" # speed (choose [0.8, 0.7, 0.5]) # shape "0.3",
+        whenmod 10 5 (0.125 <~) $ s "bmsn:3" #speed 0.75 # shape "0.2" #gain 0.99,
+        gain "1(3,8,<0 12 10>)" # s "idmhit2:5" # shape 0.7 #lpf 4000 # gain 1.1
+        ] # gain (0.96)
+
+do
+  let vpat2 = "{1 1*2 ~ 1}%2"
+  xfadeIn 1 8 $ every 4 (crushit. rip 0.125 0.25)
+   $ sometimes (off 0.125 (|+ n "2 4"))
+    $ gain (vpat2) #note (choose [0,-2,3,7])
+    |+| note "<1 -11>"
+      # s "[bmsy:2]"
+      #sus 0.4 #rel 0.33
+      # speed "[1, 1.02]"
+      # gain 1.05
+      |+| note "<0 0 12 24>"
+
+all $ (#hpf "1200").(every 4 (#squiz "1 0 2 0"))
+
+all $ (#coarse "12 24 64 8")
+
+
+d2 shh
+hu
+
+--- thanks everyone ! wish i could have been there :) have a good one
+setcps(161/120/2)
