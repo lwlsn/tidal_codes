@@ -1,0 +1,308 @@
+setcps(148/120/2)
+
+-- using spaceVerb, randomisePat?
+
+
+
+---------------- _____ --------_____ - ___---  _ --------
+--- \ \ --  o -- |_o | -  o  -|_   _|-|_  | - | | -------
+---- \ \ - | | - __| | - | | -  | |  --_| | - | |_-------
+-- / o / - |_| -|___ | - |_| -  |_|  -|_o_| - |___| -----
+---------------------------------------------------------
+--  _____ - _____  ----_ ---__ ----__- _____  -- ____ ---
+--  |  _| - | o _| -- | | --\ \ - / /- | o _| -- |  _| --
+--  _\ \  - |  |_  -- | |_-- \ \_/ / - |  |_  -- _\ \  --
+-- |___\  - |_____| - |___| - \ _ / -- |_____| -|___\ ---
+----------------------------------------------------------
+
+
+all $ id
+
+-- hello !!
+
+----
+
+xfadeIn 1 8
+-- d4
+$ every 5 (jux (rev.(#hpf "200 400 800 1200")))
+$ rarely (randomisePat)
+$ whenmod 12 8 (|*| speed "2")
+$ loopAt 8 $ chop 8 $ striate 8
+$ s "teeno"
+# room 0.15
+# size 0.1
+# gain 1.15
+# orbit 0
+#speed "<-1>"
+
+
+-- scrambled vox
+d2
+  $ degradeBy 0.2
+  $ begin ( off 0.125 (+0.25) " 0.1 0.5 [~ 0.2] 0.75" )
+  # sound "<adeej>"
+  #n (irand 8) # sustain "<0.2 0.2 0.4 0.1>"
+  # accelerate "0.2 -0.2"
+  # hpf 20 # hpq 0.3
+  # ctf 8000 #g 1.02
+  # sp "-0.5"
+
+
+once $ s "rise" #acc "-1.5"
+
+
+d3
+    $ foldEvery [3,4] (0.25 ~>)
+    $ every 2 (0.25 <~)
+    $ sometimes (#crush 8)
+    $ stack [
+    degradeBy "< 0.3 0.1 0.6 0.2>" $ sound (samples "<can sfe-fx:1>(7,8)?" (slow 5 $ scan 6)) #cutoff (range 600 2000 $ slow 8 $ sine ) #g "<0.8 0.85>",
+    stz 3 (0.125) 0.75 $ degBy 0.25 $ s "cosmic:1(7,16)?"  #speed 0.85 #legato "<0.75 1>" #g 1 #pan rand
+    ]
+    |*| gain 0.98
+
+
+d4
+$ spaceVerb
+$ sometimes (palindrome)
+$ rarely (off 0.125 ((+ n "1 2 3").(# end 0.5)))
+$ s "ser:1(<3 5>,8)" #note "<21 21 24 19>"
+# sp "-1"
+|+| note "<-12 0>"
+#gain 0.9
+
+
+once $ s "sfe-fx:4" #acc "-1.5"
+
+all $ id
+
+
+d3
+$ within (0.25,0.75) (#coarse "<2 4 6 8>")
+$ every 6 (loopAt 2)
+$ within (0.25,0.75) (#coarse "<2 4 6 8>")
+ $ stack [
+  every 4 (0.25 <~) $ every 5 (jux (#coarse "<6 12>")) $ s "<clubkick:2*2 clubkick:2(3,8)> ~ "
+  #cutoff 700  #size 0.2 #orbit "1" #gain "1.02",
+  degradeBy "< 0.6>" $ sound (samples "<can>(7,8)?" (slow 5 $ scan 6)) #cutoff (range 600 2000 $ slow 8 $ sine )
+  #speed 0.25 #g "<0.9 0.95 1.0 1.05>",
+  stz 3 (0.125) 0.75 $ degBy 0.25 $ s "cosmic:1(7,16)?" #n (irand 2) #speed 0.85 #legato "<0.75 1>" #g 1 #pan rand,
+  s "alk*8?" #n (choose [0,1,2,4,5,8,9,13,16]) #speed "<0.75>" #shape 0.25
+ ]
+
+
+d2
+  $ randomisePat
+  $ loopAt "<0 1>"
+  $ sound "<welp cckit1>*8?"
+  # n (irand 16)
+  # shape 0.3
+  # size 0.7
+  # end 0.4
+  # cut (choose [1,2..16])
+  # gain 1.1
+
+
+
+----
+
+d4
+  $ fast "<0.5 0.25>" $ every 2 (crushit.(rip 0.85 0.25))
+  $ s "<can>(5,8,<0 1 2>)"
+  # up (range 15 12 $ slow 8 $ saw) # g 1.2
+    #coarse "<1 10 6 8>"
+    #squiz "<0 1 0 2>"
+
+
+d3
+    $ within (0.25,0.75) (#coarse "<2 4 6 8>")
+    $ every 6 (loopAt 2)
+     $ stack [
+       stz 3 (0.125) 0.75 $ degBy 0.25 $ s "cosmic:1(7,16)?" #n (irand 2) #speed 0.85 #legato "<0.75 1>" #g 1 #pan rand,
+       s "alk*8?" #n (choose [0,1,2,4,5,8,9,13,16]) #speed "<0.75>" #shape 0.25
+     ]
+
+
+all $ (# waveloss  "4 8 12 24")
+
+all $ id
+
+
+----- idea 2 ----
+setcps(142/120/2)
+
+d2 shh
+
+clutchIn 1 8
+$ every 5 (jux (|*| speed " 0.5 1.5"))
+$ degradeBy  0.5
+$ loopAt 8 $ chop 16 $ s "erokia-loops:3"
+# n "<3 3 5 5>" #gain 1.1
+
+
+xfadeIn 5 8
+  $ striate 2
+  $ every 5 ((#lpf "800 400 200 ").(rep' 2).shift)
+  $ (spin 2.(#vowel "<a e o>"))
+  $ s "tekken-perc"
+  # n (irand 16 + 12)
+  # sp "-2 -0.5"
+  #g 1.1
+
+
+d3
+  $ every 5 (#hpf " 400 800 1000 1200")
+  $ whenmod 24 20 (const $ silence)
+  $ stack [
+    every 2 (const $ silence) $  stz 3 0.125 0.7 $ often (slow 2) $ s "sfe:6*2"  #sp "<0.6 1>" #gain "0.8",
+    sometimes (0.25 <~) $ s "[k(3,8,<0 1>)]" # ctf "<400 800 1200 2400>" # sp 0.8 # shape 0.2 #g 1.1,
+    off 0.25 (|+| n "<1 3 5 2>") $ struct "t(3,8)@2" $ n "<0 1 4>" # sound "[jung5 jung6 jung7]/8"
+    # unit "c" # speed "8" # gain 1,
+    sometimes (fast 2 ) $ s "cosmic:1(7,8,<0 1>)?"  # g 0.8 #sp 0.5,
+    gain "{1 [~ 1 ] ~ ~ [~ 1] ~ 1 ~}%4" # s "dr55" #note "-5" |*| gain 0.8
+  ]
+  # gain 0.95
+
+hush
+
+d4 shh -- smoother transition
+
+
+-- only hats and scrambles ?
+
+----
+all $ (#lpf "2000 400 1200 800")
+
+
+--- scramble all ur vox -----
+
+
+--- transitions ??
+
+d5 shh
+
+d2
+$ randomisePat
+$ degradeBy 0.1
+$ sound "<cckit1 revkit>*8?"
+# n (irand 8)
+# shape 0.3
+# size 0.7
+# end 0.4
+# orbit 0
+# cut (choose [1,2..16])
+# gain 1.1
+
+
+d4
+$ stutWith 2 (0.253)
+(spaceVerb)
+$ degradeBy 0.3
+$ whenmod 6 4 (brak)
+$ every 4 (fast 2)
+$ stut' 3 0.125 (|*| gain "0.75")
+$ sound "<sfe:1*8? krane:2*8?>"
+#n (irand 2)
+# rel 0.1
+# speed (fast 2 $ range 0.85 1.1 $ rand)
+# orbit 3
+# gain 0.8
+
+all $ id
+
+
+xfadeIn 3 8
+  $ every 2 (loopAt "<1 2 4 8 >")
+  $ s "can ~ [~ peri] voodoo:1"
+  # sp (range 0.1 2 $ slow 8 $ sine)
+  #up "<-12 0>"
+  #coarse "<20 10 6 8>"
+  |*| g 0.8
+
+
+xfadeIn 1 16
+  $ off 0.25 (+| note "<0 12 24 12>")
+  $ rarely (slow "<1 <2 4>>")
+  $ sometimes (fast "<1 2>")
+  $ stack [
+      s "ser:2(5,8,<0 1 2>)" -- synthys6,
+    ]
+  # note (scale "phry" $ wchoose [(0,0.2),(1,0.2),(3,0.1),(5,0.2),(7, 0.1),(9,0.1)]) --- ,
+  # ctf (range 800 2400 $ slow 32 $ sine)
+  # sus 0.6 #rel 0.8 #gain 1.1
+  # speed "[1, 1.02]"
+  |+| note "-12 0 12 0"
+
+
+do
+  let masterMix = [0.88,0.8,0.8,0.8,0.8] -- 0.9,0.8,0.8,0.9,0.9
+  xfadeIn 5 8
+    $ striate "< 1 2 4 >"
+      $ sometimes (juxBy 0.2 (rev.(#speed "-1")))
+      $ note "<cs4 ds4>" # s "< ~ alstab:6 ~ alstab:4>"
+      #accelerate "< 0.1 -0.4>"
+      |*| g (masterMix!!4)
+  xfadeIn 2 8
+    -- $ off 0.125 (( +| n " <2>").(stz 6 0.125 0.8))
+    $ note "<cs5 ds5 f5 f5>(3,8,<0 1>)" # s "[GBass:4, ser2]"
+      #g 0.9
+      # cutoff (range 200 4000 $ slow 16 $ sine)
+
+
+  do
+    let trig = (trigger 1 $ range 0.8 0.1 $ envLR)
+        (&) = (|*|)
+    all $ (slow 1 . (& speed (1/2)) . stutWith "<2 1>" (1/16) ((& speed 2).(& gain 1.3))). (sometimes (#waveloss "20 0 10 0"))
+    d3 $ slow 2 $ stack [
+      sound "[808:1, auto:10]([16 8 12],16,[0 4 10]/3)" # speed "1.1" # coarse "4" # gain (slow 8 "1 0"),
+      sound "dr(8,8)?" # n (iter 4 "0 5 6 8 9 10 12 13 14") # coarse "2 4 6" # speed (choose [0.8, 0.7, 0.5]) # shape "0.3" # gain "0.87",
+      sound "glitch:2/2"
+      ]
+    d4 $ stack [
+      n "[6(3,8,<0 4>)]" # "[db, 808bd:5]" & gain 3 # orbit 0 # krush 3,
+      n "[~ 15]" # "[db]" & gain 3 # orbit 0 # krush 3 & speed (7/4)
+      ]
+
+
+all $ (#lpf "2000 4000 1200 800 400 1200"). (sometimes (#acc "-0.2 0.2"))
+
+
+do
+  d5 $ chew 4 "0 1*2 2*2 [~ 3]" $ n "0 .. 7"
+      # sound "<drum welp>"
+
+
+d2
+  $ splice "<16 16 16 <20 10>>" ("[0 [1 3] 2 3 6 [~ 3] 2*2 1]/2")
+  $ s "<erokia-stabs erokia2:3>"
+  #sus 0.8 #rel 0.8
+  #gain 1.3
+  #lpf "2000 4000 1200 800 400 1200"
+
+
+-- d1 fade out
+
+do
+  all $ id
+  clutchIn 1 8
+    $ spin 2
+    $ fast 2
+    -- $ degradeBy 0.55
+    $ every 2 (#sp "[2.0 4.0 0.5 3.0]/2")
+    $ sometimes (linger 1)
+    $ randslice 64 -- change 64
+    $ splice "<16>" "[0 [1 3] 2 3 6 [~ 3] 2*2 1]/2"
+    $ s "wdws:7"
+    |+| note "1"
+
+
+d3
+  $ stut' 3 0.125 (|*| gain 0.8)
+  $ note "{d4 d4 as3 as3 f4 f4 as4 a4}%1"
+  #s "[ABass]"
+  #n (choose [1,2,3,4,5])
+  #shape 0.5
+  #sus 1.2 #rel 1.2
+  # speed "[1, 1.02]"
+  #lpf "5800"
+  #gain 1.2
