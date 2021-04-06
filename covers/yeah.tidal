@@ -1,0 +1,26 @@
+setcps(130/120/2)
+
+
+do
+  let notePat = "{[g4 d5] [~ g4] ds5 ~ [g4 ds5] [~ g4] d5 ~ }%4"
+      voxPat = "{g4 g4 [d4,g4] d4}%8"
+      mix = [1, 1, 1, 1.4]
+  d1 $ note (notePat) # s "ser:3"
+      # sus 0.4 #rel 0.4  #shape 0.25
+      #cutoff (range 1000 10000 $ slowersine) #lpq (range 0.35 0.1 $ slowersine)
+      |*| gain (mix!!0)
+  d2 $ note "{<g4 g4 ds4 d4>(3,8) ~ ~ ~}%2" # s "[ser2:1, ser2:0]"
+      |*| gain (mix!!1)
+  d3 $ stack [
+    gain "~ ~ 1 ~ " # s "<sfe:2 sfe:3>" #speed 0.8 #gain 0.8,
+    gain "{1 ~ ~ [~ 1] 1 1 ~ 1}%8" #sound "bmkd:4",
+    off 0.125 (|+| n "<1 3 5 2>") $ struct "t(3,8)@2" $ n "<0 1 4>"
+    # sound "[jung5 jung6 jung7]/8" #speed "8" #unit "c" #gain 1.1,
+    often (fast 2) $ sound "cosmic:1(7,8,<0 1 2>)" #gain 1.1
+   ]
+   |*| gain (mix!!2)
+  d4
+    $ note (voxPat) # sound "ser:1"
+    # sus 0.4 #rel 0.4
+    # vowel (choose ["a", "i", "e","o"])
+    |*| gain (mix!!3)
