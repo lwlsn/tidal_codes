@@ -1,0 +1,204 @@
+setcps(153/120/2)
+
+resetCycles
+
+all $ id
+
+-- fast then slow
+
+d1
+$ loopAt 128
+$ rarely (randDelay)
+$ chop (256*4)
+$ s "svlng"
+-- # speed "[1 2]"
+
+
+-- moody ambient  ---
+xfadeIn 1 16
+  $ loopAt 24
+  $ chop (24*4)
+  $ rarely (randDelay)
+  $ s "svlng:1"
+  # gain 1.1
+  |*| speed "1.0 2.0 "
+
+-- better rhythm here ?
+xfadeIn 2 8
+  $ iter 4 $ every 2 (4 <~)
+  $ jux rev
+  $ palindrome
+  $ sound (scramble 2 " svk:1 [svsn:5 svk:2] dr*2 <~ sfe-perc:3>")
+
+clutchIn 3 4
+  $ loopAt 24
+  $ chop (24*4)
+  $ s "svlng:3"
+  |*| speed "1.0 2.0"
+
+clutchIn 1 8
+  $ loopAt 2 -- 2 to 4
+  $ splice 16 ( scramble 8 "<0 8> 1 2*2 4") --  8 to 4
+  $ s "svtonal:6"
+  # gain 1.1
+  # speed "1 1 -1 1"
+
+d4
+  $ stack [
+      rarely (fast 2) $ sound "amencutup*8?" #n (irand 8)
+          # speed "[1 0.85]/2",
+      n "[6(3,8,<0 4>)]" # s "[db, 808bd:5]"
+          |*| gain 1.2 # orbit 0 # krush 3,
+      n "[~ 15]" # s "[sfe-perc, svpc]"
+          |*| gain "<1>" # orbit 0 # krush 3
+          |*| speed "[1.0 1.5 0.75 2]/4"
+    ]
+
+
+-- how to add this in?
+d2
+    $ (#nudge (range 3 0 $ slowsine)).(#coarse "1 2 4 8 12 16 24 32")
+     $ (#hpf (range 40 1000 $ slow 8 saw))
+    $ s "[svk:1, svk:2]*8"
+
+d3
+  $ jux (#vowel "a e i o u")
+  $ rarely (superimpose (iter 4) )
+  $ loopAt "<1 1 2 1>"
+  $ s "<svbass:3 svbass:4>"  # gain 1.2
+
+
+-- where to next?
+
+d4
+  $ loopAt 16
+  $ chop (16*4)
+  $ s "svlng:8"
+  |*| speed "1.0 2.0"
+  # gain 1.4
+
+
+d1
+  $  loopAt 4 -- 2 to 4
+  -- $ chop (8*4)
+  $ splice 32 ( scramble 4 "<0 8> 1 2*2 4") --  8 to 4
+  $ s "svtonal:13"
+
+d2 shh
+
+-- more hardcore ---
+
+d4 shh
+
+
+d2
+  $ every 4 (0.25 <~)
+  $ every 5 (#hpf "200 400 1200 1800")
+  $ every 6 (shift' 2)
+  $ degradeBy 0.15
+  $ stack [
+    every 4 (#sp "1") $ sound "amencutup*8?" # n (irand 16) #speed "-1" #gain 1.3,
+    n "[6(3,8,<0 4>)]" # s "[db, 808bd:5]" |*| gain 1.8 # orbit 0 # krush 3,
+    n "[~ 15]" # s "[sfe-perc, svpc]" |*| gain "<1>" # orbit 0 # krush 3,
+    sound "[ ~  ~ svsn:10 sfe-perc:1, bmkd:2*2]" # speed 0.8,
+    every 4 (0.25 <~) $ fast "1 2 0.5 1 " $ sound "[k(<3 5>,8,<0 1 2 >)]"
+    #shape 0.25 # speed 0.8
+    ]
+    -- # hpf "4000 200 400 3000 4000 8000"
+    -- # pan 1
+
+xfadeIn 1 4 $ shh
+
+xfadeIn 3 16
+   $ almostNever (off 0.25 (|+| note "<12>"))
+   $ up "{2 [[2 5] 5] -5 [[7 5] 5]}%1"
+   # s "[umbass:2]"
+   # sus 0.8 #rel 1.1
+   #shape 0.2
+   # speed "[1,1.02]"
+   #gain 0.9
+   -- #pan 1
+
+
+d1
+    -- $ every 4 ( |+| note "-12 12 0 7")
+    -- $ every 5 (jux ())
+      $ stut' 5 0.125 (|*| gain "0.87")
+      -- $ (# lpf "4000 3000 200 400 800 1200")
+        $ stack [
+          note ( "[16,<9 <19 16>>] [~ 14] <16 <9 19>>(<1 1 2 1>,7) 12" )
+            # s "ser:2" |+| note "< -24 -12 0 -12>"
+          -- , note ( off 0.125 (+ "<-12 0 7 12>")
+          -- "{~ 12 ~ ~ [~ 17] 12 ~ ~ [~ 9] 14 ~ ~ ~ 12 ~ ~}%8" )
+            -- # s "ser:4" # sus 0.6 # rel 0.6 # gain 1.2
+        ]
+        |-| note 12
+        #speed  "[1,1.02]" #acc "0 0 0 0 0 0-0.2 0.4"
+        #squiz " 1 0 2 0"
+        # crush "4 8 12 10" #coarse "8 2 4 16"
+      -- # pan 1
+
+
+d4
+    $ loopAt 8
+    $ chop (24*4)
+    $ s "svlng:6"
+    |*| speed "1.0 2.0"
+    # gain 1.4
+
+
+d2 shh
+
+
+-- transition here pls
+
+
+d4
+    $ loopAt 12
+    $ chop (24*4)
+    $ s "svlng:9"
+    |*| speed "1.0 2.0"
+    # gain 1.4
+
+
+d3
+  $ stack [
+      s "als(3,8)" #n (irand 16) #speed (range 0.5 0.75 $ slow 8 $ sine)
+          #lpf (range 800 2500 $ slow 16 $ saw),
+      s "doinks(3,8)" #n (irand 16) #speed 0.5
+      ]  #coarse "< 24 12>"
+
+
+-- quieter bit?
+
+
+xfadeIn 1 8
+ $ loopAt 64 $ striate 128
+ $ whenmod 7 4 (splice "0.5" ( scramble 4 "<0 8> 1 2*2 4"). ( # sp "[1, 1.02]").(#coarse "1 2 4 8"))
+ $ splice 8 ( scramble 4 "<0 8> 1 2*2 4") --  8 to 4
+ $ superimpose (#vowel "a e o")
+  $ s "svtonal:11"
+
+
+d2
+  $ off 0.125 (+| n "<12 0>")
+  $ stack [
+    s "<dr revkit>*8?" # n (density 2.3 $ run 7) # gain "0.75",
+    every 4 (density 2 ) $ sound "808:5([5 3 7]/3,8)" # speed "0.8"
+  ]
+
+
+
+
+
+d1 $ every 4 (jux (rev).(slow 2)) $ every 5 (chunk 2 (hurry 2))
+    $ stack [
+          every 2 (const $ s "sfe:6*2" # shape 0.5 #g 1.1) $
+          sound "sfe:7(3,8)" #shape 0.8 #ctf 1200 #g 1.1,
+          s "hatys:2*16?" #speed "0.8" #coarse "<2 4 6 1>"  #g 0.8
+       ] |*| gain 0.8
+
+
+d5 $ loopAt 64 $ striate 128
+    $ superimpose (#vowel "a e o")
+    $ s "svtonal:11"
