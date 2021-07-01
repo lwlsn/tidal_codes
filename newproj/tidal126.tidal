@@ -1,0 +1,106 @@
+
+setcps(151/120/2)
+
+xfadeIn 1 8
+  $ rarely (jux (slow 2))
+  $ stack [
+  note "{f4 [~ f4] a4 [d4 d5] [~ g4] [~ g4] d4 [d5 e4] f5 [~ f5] a5 [a4 a5] g4 [~ g4] d4 [d5 e4] }%4"
+  , note ( off 0.125 (+7) "{<f5 g5 a5>*2 ~ ~ ~}%4")
+  ]
+  # s "[ser:7, ser:5]" # sus 0.6 # rel 0.6 # gain 1.4
+  # lpf (range 400 4000 $ slowersine)
+  # lpq (range 0.05 0.15 $ slowersine)
+  |+| note " -12 0 12 0 "
+
+
+do
+  d2 $ note "{f4 [~ f4] g4 [g4 [~ g4]] <a4 d4> ~ ~ ~}%1"
+      # s "[ser2:2, ser2:1]"
+      # speed "[1, 1.02]"
+      |+| note "0" # gain 1
+  d3
+      -- $ superimpose (# vowel "<a e o u>")
+      $ every 4 (#hpf "400 800 1200")
+      $ every 8 (#speed "-1")
+      $ stack [
+      slow 2 $ s "{k*2 k k ~  ~ k k [~ k] }%4" #gain 1.1,
+      s "cckit2" #n (irand 12) #sp "<0.6 0.3>" #gain "0.9 0.9 0 0.9"
+      ]
+      # speed "[1 0.5 2 1]/4"
+      -- # acc "-0.2 0.2"
+  d5
+    $ gain "{~ ~ ~ ~ ~ ~ ~ ~ ~ ~ [1 [1 1]] [1 [~ 1]] [1 [1 1]]  [1 [~ 1]] [1*2 ~] [1 [1 1]] }%2"
+    # s "[ser:6]" # sus 0.8 # rel 0.8
+    # note (choose [-3,9, -5, 7, 2,14,-10])
+    # speed "[1, 1.02]"
+    # gain 1.2
+
+
+
+d3
+-- $ superimpose (# vowel "<a e o u>")
+$ every 4 (#hpf "400 800 1200")
+$ every 8 (#speed "-1")
+$ stack [
+n "[6(3,8,<0 4>)]" # s "[db, 808bd:5]" # gain 1.1 # orbit 0 # krush 3,
+sometimes (rep 2) $ rarely (stut' 3 0.125 (|*| gain 0.8)) $
+s "~ sn:2" #hpf 40 # g 0.92,
+s "{k*2 k k ~  ~ k k [~ k] }%4" #gain 1.1,
+s "cckit2" #n (irand 12) #sp "<0.6 0.3>" #gain "0.9 0.9 0 0.9"
+]
+# speed "[1 0.5 2 1]/4"
+-- # acc "-0.2 0.2"
+
+
+d4
+  $ loopAt 8
+  $ chop (24*4)
+  $ s "svlng:3"
+  |*| speed "1.0 2.0"
+  # gain 1.2
+
+
+
+d1 shh
+
+-- with breaks ...
+
+d3
+  $ every 4 (0.25 <~)
+  -- $ degradeBy 0.5
+  $ every 5 (shift)
+  $ stack [
+    loopAt "1 1 2 2 " $ chop 32 $ s "breaks111" #gain "1.1 0",
+    n "[6(3,8,<0 4>)]" # s "[db, 808bd:5]" |*| gain 1.2 # orbit 0 # krush 3,
+    n "[~ 15]" # s "[sfe-perc, svpc]" |*| gain "<0.9>" # orbit 0 # krush 3,
+    every 4 (0.25 <~) $ fast "1 2 0.5 1 " $
+      sound "[k(3,8,<0 1 2 >), < svk:1 svk:2>*2]"
+    #shape 0.5 # speed 0.8
+  ]
+
+
+d4
+  $ loopAt 8
+  $ chop (24*4)
+  $ s "svlng:3"
+  |*| speed "-1.0 -2.0"
+  # gain 1.2
+
+
+d3
+    $ loopAt 8
+    $ chop (24*4)
+    $ s "svlng:12"
+    |*| speed "1.0 2.0"
+    # gain 1.2
+
+
+  xfadeIn 1 8
+    $ stack [
+    note "{f4 [~ f4] a4 [d4 d5] [~ g4] [~ g4] d4 [d5 e4] f5 [~ f5] a5 [a4 a5] g4 [~ g4] d4 [d5 e4] }%4"
+    , note ( off 0.125 (+7) "{<f5 g5 a5>*2 ~ ~ ~}%4")
+    ]
+    # s "[ser:7, ser:5]" # sus 0.6 # rel 0.6 # gain 1.4
+    # lpf (range 400 4000 $ slowersine)
+    # lpq (range 0.05 0.15 $ slowersine)
+    |+| note " 12 24 "
