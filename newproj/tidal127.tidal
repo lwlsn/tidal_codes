@@ -1,0 +1,62 @@
+
+xfadeIn 3 8
+$ up "{2 [[2 5] 5] -5 [[7 5] 5]}%1"
+# s "[umbass:2]"
+ # sus 0.8 #rel 0.9
+ # speed "[1,1.02]"
+ # gain 1
+
+xfadeIn 4 8 $ shh
+
+
+d2
+  $ every 4 (0.25 <~)
+  $ every 5 (#hpf "200 400 1200 1800")
+  $ every 6 (shift' 2)
+  $ degradeBy 0.15
+  -- $ whenmod 24 20 (const $ silence)
+  $ stack [
+    every 4 (#sp "1") $ sound "amencutup*8?" # n (irand 16) #speed "-1" #gain 1.3,
+    n "[6(3,8,<0 4>)]" # s "[db, 808bd:5]" |*| gain 1.8 # orbit 0 # krush 3,
+    n "[~ 15]" # s "[sfe-perc, svpc]" |*| gain "<1>" # orbit 0 # krush 3,
+    every 4 (0.25 <~) $ sometimes (iter 4)$
+    sound "[ ~  ~ svsn:10 sfe-perc:1, bmkd:2*2]"
+      # speed (range 0.5 0.8 $ slowersine) #gain 0.9,
+     fast "1 0.5 0.25 0.125 " $ sound "[k(<3 5>,8,<0 1 2 >)]"
+    #shape 0.6 # speed 0.8
+    ]
+    -- # hpf "4000 200 400 3000 4000 8000"
+    -- # pan 1
+
+xfadeIn 1 4 $ shh
+
+
+-- better way to fade this is in
+xfadeIn 1 8
+    -- $ every 4 ( |+| note "-12 12 0 7")
+    -- $ every 5 (jux ())
+      -- $ stut' 5 0.125 (|*| gain "0.87")
+      $ degBy 0.25
+      $ (# lpf "4000 3000 200 400 800 1200")
+        $ stack [
+          note ( "[16,<9 <19 16>>] [~ 14] <16 <9 19>>(<1 1 2 1>,7) 12" )
+            # s "ser:2" |+| note "< -24 -12 0 -12>",
+           whenmod 24 20 (|+| note "12") $
+            note ( -- off 0.125 (+ "<-12 0 7 12>")
+          "{~ 12 ~ ~ [~ 17] 12 ~ ~ [~ 9] 14 ~ ~ ~ 12 ~ ~}%8" )
+            # s "ser:4" # sus 0.6 # rel 0.6 # gain 1.2
+        ]
+        -- |-| note 24
+        #speed "[1,1.02]" #acc "0 0 0 0 0 0-0.2 0.4"
+        #squiz " 1 0 2 0"
+        -- # crush "4 8 12 10"
+        # coarse "1 2 4 8 16"
+      -- # pan 1
+
+
+d4
+    $ loopAt 8
+    $ chop (24*4)
+    $ s "svlng:6"
+    |*| speed "1.0 2.0"
+    # gain 1.4
