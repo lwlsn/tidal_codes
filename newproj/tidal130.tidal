@@ -1,0 +1,43 @@
+setcps(153/120/2)
+
+
+do
+  let pat = "{1 ~ ~ 1 ~ ~ ~ ~}%2"
+  d1 $ (|+| gain "0.1") $ foldEvery [3,4] (0.25 <~) $
+    stack [
+      slow 2 $ sound "~ svpc:4" # gain "1",
+      sometimes (stut' 1 (0.0625) (|*| gain "0.95")) $ shift $ s "amencutup*8?" #n (irand 16),
+      jux (iter 16) $
+        sound "svsn([5 3 7]/3,8)" # cut "100" #n (irand 8) # end "0.2" # gain "0.7" # speed "2"
+          # accelerate (choose [-1, 1])
+    ]
+    |*| gain "0.9"
+
+
+-- midi , serum key clock.. pluck conjurer
+do
+  let pat = "{1 1*2 ~ 0.9 ~ ~ 1*2 [~ 1]}%8"
+  d2
+    $ (off 0.125 ( |+| note 12) )
+    $ (off 0.25 ( |+| note 7) )
+    $ gain (pat)
+    # sound "midi1" # note (choose [-3, -1, 1,4 ])
+    +| note "24 0 12 0"
+
+
+d3 $ note "<13 11 16 9>*8?"
+ # sound "ser:1"
+ # speed "[1, -1]"
+
+
+ d4
+   $ loopAt 8
+   $ chop (24*4)
+   $ s "svlng:10"
+   |*| speed "[-1.0 1.0]/2"
+   # gain 1.1
+
+
+  do
+    let kpat = "{1 1 ~ [~ 1] 1*2 1 ~ 1 1 ~ ~ 1 1*2 1 1 1 }%8"
+    d5 $ gain (kpat) # sound "k" #shape (choose [0.05, 0.1 .. 0.2])
