@@ -1,0 +1,38 @@
+setcps(151/120/2)
+
+
+d3
+  $ loopAt 8
+  $ chop (24*4)
+  $ s "svlng:2"
+  |*| speed "1.0 2.0"
+  # gain 1.2
+
+
+xfadeIn 1 8
+  $ slow 2
+  $ stut' 6 0.125 (|*| gain 0.85)
+  $ note ( off 0.125 (+12)
+   "[a4,e5,a5](3,8,<0 1 2>) [gs4, e5,gs5](3,8,<0 1 2>) [e4, gs4, e5](3,8) [fs4, fs5](5,8)" )
+  # s "ser:2"
+  # sus 0.4 #rel 0.4 # speed "[1, 1.02]"  #gain 1.1
+  |-| note "12 0 -12 0"
+  -- #lpf (range 200 4000 $ slowersine)
+  -- #lpq (range 0.1 0.25 $ slowersine)
+
+
+d2
+  $ fast 32
+  $ note "{[a4 [~ a4]] [ b4 [~ b4]] cs4 e4}%1"
+  # sound "[ser2:2, ser2:1]"
+  # speed "[1, 1.02]"
+  # gain 1.1
+  |+| note "48"
+
+
+d4
+  $ loopAt 16
+  $ chop (16*4)
+  $ s "svlng:0"
+  |*| speed "1.0 2.0"
+  # gain 0.9
