@@ -1,0 +1,57 @@
+--- airy and spacey ---
+
+
+setcps(150/120/2)
+
+clutchIn 1 8
+    $ spin 2
+    -- $ chop 12
+    $ loopAt 2 -- 2 to 1
+    $ splice 32 (scramble 4 "<0 8> 1 2*2 4") -- 4 to 8
+    $ s "svtonal:6"
+    # speed "1 1 -1 1"
+
+d4 
+$ stack [
+      sound "amencutup*8?" #n (irand 8)  # speed "[1 0.85]/2",
+      splice 16 "0 .. 15" $ s "breaks111" # g "<0.95 0>",
+      n "[6(3,8,<0 4>)]" # s "[db, 808bd:5]" |*| gain 1.2 # orbit 0 # krush 3,
+      n "[~ 15]" # s "[sfe-perc, svpc]" |*| gain "<1>" # orbit 0 # krush 3
+      |*| speed "[1.0 1.5 0.75 2]/4"
+      ]
+
+
+d2
+$ (#nudge (range 3 0 $ slowsine)).(#coarse "1 2 4 8 12 16 24 32")
+ $ (#hpf (range 40 1000 $ slow 8 saw))
+$ s "[svk:1, svk:2]*8" 
+ -- #pan 1
+
+
+xfadeIn 2 8
+   -- $ sometimes (spaceVerb)
+   $ s "[svk:a1, svk:2]*8"
+   -- # pan 1
+   -- # orbit 1
+
+
+clutchIn 4 8
+       $ loopAt 2
+       $ iter 2
+       $ splice 32 ( scramble 2 "<0 8> 1 2 8")
+       $ s "svtonal:5"
+
+-- 2 to 1, 4 to 8
+
+d2
+    $ (#nudge (range 0 3 $ slowsine))
+     $ (#hpf (range 40 1000 $ slowersine))
+     $ (#speed (range 0.5 2 $ slow 4 $ sine))
+     $ sometimes (spaceVerb)
+     $ slow 2 $ s "[svpc:3*8, svsn:4]"
+     # orbit 1
+     # gain 0.9
+
+
+
+all $ (#hpf "200 400 800 1200 3000 200")
