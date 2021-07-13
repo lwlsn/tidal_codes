@@ -1,0 +1,8 @@
+d3
+$ stut' 7 0.25 (|*| gain "0.75" )
+$ note "{[ds5, g5, as5] ~ [d5, f5, c6] [d5, as5]}%1"
+# sound "superhoover" #cutoff 1200
+# speed "[1, 1.02]"
+|-| note "12"
+# sus 0.4 # rel 0.4
+
